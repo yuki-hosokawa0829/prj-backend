@@ -1,5 +1,5 @@
 ### Import Variables
-Invoke-Expression (Get-Content ".\Variables.ps1" -Raw)
+Invoke-Expression (Get-Content ".\VariablesTest.ps1" -Raw)
 
 
 ### Functions
