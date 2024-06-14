@@ -182,6 +182,30 @@ function AssignRoleOverStorageContainer {
   }
 }
 
+function AssignRBACAdministerRoleToServicePrincipal {
+  param (
+    [string] $SubscriptionId,
+    [String[]] $EnterpriseAppNameList,
+    [String] $ResourceGroupName,
+    [String] $RoleDefinitionIds
+  )
+
+  # Assign RBAC Administer Role to Service Principal over Resource Group to manage IAM setting of Key Vault
+  $ServicePrincipalIdList = @()
+  $Scope = "/subscriptions/$SubscriptionId/resourceGroups/" + $ResourceGroupName
+
+  foreach ($EnterpriseAppName in $EnterpriseAppNameList) {
+    $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppName
+    $ServicePrincipalIdList += (Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId).Id
+  }
+
+  # Create Condition for Role Assignment to manage IAM setting of Key Vault
+  $ServicePrincipals = $ServicePrincipalIdList -join ", "
+  $Condition = "((!(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})) OR (@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {$RoleDefinitionIds} AND @Request[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {$ServicePrincipals})) AND ((!(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})) OR (@Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {$RoleDefinitionIds} AND @Resource[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {$ServicePrincipals}))"
+
+  New-AzRoleAssignment -ObjectId $ServicePrincipalIdList[0] -RoleDefinitionName "Role Based Access Control Administrator" -Scope $Scope -ConditionVersion 2.0 -Condition $Condition
+}
+
 
 # Login to Azure
 Connect-AzAccount -Subscription $SubscriptionId -Tenant $TenantId
@@ -202,13 +226,15 @@ CreateSecret -Environment $Environment -EnterpriseAppNameList $EnterpriseAppName
 AssignRoleOverResourceGroup -SubscriptionId $SubscriptionId -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupNameList $ResourceGroupNameList
 
 # Create Storage Account
-CreateStorageAccount -Environment $Environment -ResourceGroupName $ResourceGroupNameList[0] -StorageAccountName $StorageAccountName -Location $Location
+CreateStorageAccount -Environment $Environment -ResourceGroupName $ResourceGroupNameForBackend -StorageAccountName $StorageAccountName -Location $Location
 
 # Create Storage Container
-CreateStorageContainer -Environment $Environment -ResourceGroupName $ResourceGroupNameList[0] -StorageAccountName $StorageAccountName -StorageContainerNameList $StorageContainerNameList
+CreateStorageContainer -Environment $Environment -ResourceGroupName $ResourceGroupNameForBackend -StorageAccountName $StorageAccountName -StorageContainerNameList $StorageContainerNameList
 
 # Assign Contributor Role to Service Principal over Storage Container
-AssignRoleOverStorageContainer -SubscriptionId $SubscriptionId -Environment $Environment -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupName $ResourceGroupNameList[0] -StorageAccountName $StorageAccountName -StorageContainerNameList $StorageContainerNameList
+AssignRoleOverStorageContainer -SubscriptionId $SubscriptionId -Environment $Environment -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupName $ResourceGroupNameForBackend -StorageAccountName $StorageAccountName -StorageContainerNameList $StorageContainerNameList
+
+AssignRBACAdministerRoleToServicePrincipal -SubscriptionId $SubscriptionId -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupName $ResourceGroupNameForBackend -RoleDefinitionIds $RoleDefinitionIds
 
 # Add Federated Credential to connect to Azure by Github Actions
 for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
