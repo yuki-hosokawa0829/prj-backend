@@ -1,5 +1,5 @@
 ### Environment
-$Environment = "Production"
+$Environment = "Develop"
 
 ### Azure Resource
 $global:SubscriptionId = "caa6074c-280f-4787-856a-219fd5467ee0"

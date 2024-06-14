@@ -41,7 +41,7 @@ function CreateServicePrincipal {
   foreach ($EnterpriseAppName in $EnterpriseAppNameList) {
     $ApplicationId = (Get-AzADApplication -DisplayName $EnterpriseAppName).AppId
     $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $ApplicationId -ErrorAction SilentlyContinue
-    
+
     if ($null -eq $ServicePrincipal) {
       New-AzADServicePrincipal -ApplicationId $ApplicationId
     }
@@ -58,11 +58,11 @@ function CreateSecret {
 
   $SecretList = @()
   $PathToCsv = $FilePath + "\AppSecretFor" + $Environment + ".csv"
-  
+
   foreach ($EnterpriseAppName in $EnterpriseAppNameList) {
     $Application = Get-AzADApplication -DisplayName $EnterpriseAppName
     $Secret = Get-AzADAppCredential -ObjectId $Application.Id -ErrorAction SilentlyContinue
-    
+
     if ($null -eq $Secret) {
       $Secret = New-AzADAppCredential -ObjectId $Application.Id -EndDate (Get-Date).AddDays(180)
       $SecretList += [PSCustomObject]@{
@@ -83,9 +83,9 @@ function AssignRoleOverResourceGroup {
     [String[]] $EnterpriseAppNameList,
     [String[]] $ResourceGroupNameList
   )
-  
+
   for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
-    
+
     if ($i -lt 3) {
       $Scope = "/subscriptions/$SubscriptionId/resourceGroups/" + $ResourceGroupNameList[$i]
       $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
@@ -126,7 +126,7 @@ function CreateStorageAccount {
         StorageAccountKey = $StorageAccountKey
       }
     )
-  
+
     $StorageAccountKeyCsv | Export-Csv -Path $PathToCsv -NoTypeInformation -Encoding UTF8
   }
 }
@@ -141,10 +141,10 @@ function CreateStorageContainer {
   )
 
   $StorageAccount = Get-AzStorageAccount -ResourceGroupName $ResourceGroupName -Name $StorageAccountName -ErrorAction SilentlyContinue
-  
+
   foreach ($StorageContainerName in $StorageContainerNameList) {
     $StorageContainer = Get-AzStorageContainer -Name $StorageContainerName -Context $StorageAccount.Context -ErrorAction SilentlyContinue
-    
+
     if ($null -eq $StorageContainer) {
       New-AzStorageContainer -Name $StorageContainerName -Context $StorageAccount.Context
     }
@@ -175,7 +175,7 @@ function AssignRoleOverStorageContainer {
       $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
       $RoleAssginment =  Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor"
     }
-    
+
     if ($null -eq $RoleAssginment) {
       New-AzRoleAssignment -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor" -Scope $Scope
     }
@@ -202,8 +202,11 @@ function AssignRBACAdministerRoleToServicePrincipal {
   # Create Condition for Role Assignment to manage IAM setting of Key Vault
   $ServicePrincipals = $ServicePrincipalIdList -join ", "
   $Condition = "((!(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})) OR (@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {$RoleDefinitionIds} AND @Request[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {$ServicePrincipals})) AND ((!(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})) OR (@Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {$RoleDefinitionIds} AND @Resource[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {$ServicePrincipals}))"
+  $RoleAssginment = Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipalIdList[0] -RoleDefinitionName "Role Based Access Control Administrator"
 
-  New-AzRoleAssignment -ObjectId $ServicePrincipalIdList[0] -RoleDefinitionName "Role Based Access Control Administrator" -Scope $Scope -ConditionVersion 2.0 -Condition $Condition
+  if ($null -eq $RoleAssginment) {
+    New-AzRoleAssignment -ObjectId $ServicePrincipalIdList[0] -RoleDefinitionName "Role Based Access Control Administrator" -Scope $Scope -ConditionVersion 2.0 -Condition $Condition
+  }
 }
 
 
@@ -250,6 +253,7 @@ for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
     }
 
     $FederatedCredentialName = (Get-AzADAppFederatedCredential -ApplicationObjectId (Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]).Id).Name
+
     if ($FederatedCredentialName -ne "GithubActions") {
       New-AzADAppFederatedCredential -ApplicationObjectId (Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]).Id -Audience "api://AzureADTokenExchange" -Issuer "https://token.actions.githubusercontent.com/" -Name "GitHubActions" -Subject $Subject
     }
