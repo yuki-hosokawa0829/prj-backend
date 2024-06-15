@@ -79,7 +79,8 @@ jobs:
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIAPL_ID: ${{ secrets.CONTAINER_PRINCIAPL_ID }}
       run: |
-        terraform plan -no-color \
+        terraform -chdir=terraform/env/develop \
+        plan -no-color \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
