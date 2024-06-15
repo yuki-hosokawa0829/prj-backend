@@ -62,13 +62,6 @@ jobs:
         -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
         -backend-config="container_name=$BACKEND_CONTAINER_NAME" \
         -backend-config="key=$BACKEND_KEY" \
-        -var resource_group_name=$RESOURCE_GROUP_NAME \
-        -var location=$LOCATION \
-        -var tenant_id=$TENANT_ID \
-        -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
-        -var base_principal_id=$BASE_PRINCIPAL_ID \
-        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
-        -var container_principal_id=$CONTAINER_PRINCIAPL_ID
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
