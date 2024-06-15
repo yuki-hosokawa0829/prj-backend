@@ -20,10 +20,6 @@ env:
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
   TERRAFORM_VERSION: 1.8.5
 
-defaults:
-  run:
-    working-directory: "./terraform/env/develop"
-
 jobs:
   terraform-apply:
     name: 'Terraform Apply'
