@@ -13,11 +13,11 @@ on:
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:
-  ARM_CLIENT_ID: ${{ secrets.AZURE_AD_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.AZURE_AD_CLIENT_SECRET }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  ARM_TENANT_ID: ${{ secrets.AZURE_AD_TENANT_ID }}
-  ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY }}
+  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
+  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_DEVELOP }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+  ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+  ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
   TERRAFORM_VERSION: 1.8.5
 
 defaults:
