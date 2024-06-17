@@ -43,13 +43,8 @@ jobs:
       with:
         terraform_version: ${{ env.TERRAFORM_VERSION }}
 
-    - name: test
-      run: cd ../../modules && ls
-      working-directory: ./terraform/env/${{ env.ENVIRONMENT }}
-
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      working-directory: ./terraform/env/${{ env.ENVIRONMENT }}
       env:
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
@@ -63,7 +58,7 @@ jobs:
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
-        terraform \
+        terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
         init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
         -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
@@ -85,6 +80,10 @@ jobs:
     #Terraform Plan
     - name: Terraform Plan
       env:
+        BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
+        BACKEND_KEY: ${{ vars.BACKEND_KEY }}
         RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ vars.LOCATION }}
         TENANT_ID: ${{ secrets.TENANT_ID }}
@@ -95,6 +94,10 @@ jobs:
       run: |
         terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
         plan -no-color \
+        -var resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
+        -var storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
+        -var container_name=$BACKEND_CONTAINER_NAME \
+        -var key=$BACKEND_KEY \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
@@ -106,6 +109,10 @@ jobs:
     # Terraform Apply
     - name: Terraform Apply
       env:
+        BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
+        BACKEND_KEY: ${{ vars.BACKEND_KEY }}
         RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ vars.LOCATION }}
         TENANT_ID: ${{ secrets.TENANT_ID }}
@@ -116,6 +123,10 @@ jobs:
       run: |
         terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
         apply -auto-approve \
+        -var resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
+        -var storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
+        -var container_name=$BACKEND_CONTAINER_NAME \
+        -var key=$BACKEND_KEY \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
