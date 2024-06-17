@@ -45,13 +45,6 @@ jobs:
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ vars.BACKEND_KEY }}
-        RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
-        LOCATION: ${{ vars.LOCATION }}
-        TENANT_ID: ${{ secrets.TENANT_ID }}
-        BACKEND_PRINCIPAL_ID: ${{ secrets.BACKEND_PRINCIPAL_ID }}
-        BASE_PRINCIPAL_ID: ${{ secrets.BASE_PRINCIPAL_ID }}
-        PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
-        CONTAINER_PRINCIAPL_ID: ${{ secrets.CONTAINER_PRINCIAPL_ID }}
       run: |
         terraform init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
@@ -61,8 +54,8 @@ jobs:
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
-    - name: Terraform Format
-      run: terraform fmt -recursive
+    - name: Terraform Validate
+      run: terraform validate -no-color
 
     #Terraform Plan
     - name: Terraform Plan
@@ -77,7 +70,7 @@ jobs:
         BACKEND_PRINCIPAL_ID: ${{ secrets.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ secrets.BASE_PRINCIPAL_ID }}
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
-        CONTAINER_PRINCIAPL_ID: ${{ secrets.CONTAINER_PRINCIAPL_ID }}
+        CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
         terraform -chdir=terraform/env/develop \
         plan -no-color \
@@ -87,7 +80,7 @@ jobs:
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
-        -var container_principal_id=$CONTAINER_PRINCIAPL_ID
+        -var container_principal_id=$CONTAINER_PRINCIPAL_ID
 
     # Terraform Apply
     - name: Terraform Apply
@@ -102,7 +95,7 @@ jobs:
         BACKEND_PRINCIPAL_ID: ${{ secrets.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ secrets.BASE_PRINCIPAL_ID }}
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
-        CONTAINER_PRINCIAPL_ID: ${{ secrets.CONTAINER_PRINCIAPL_ID }}
+        CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
         terraform apply -auto-approve \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
@@ -111,4 +104,4 @@ jobs:
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
-        -var container_principal_id=$CONTAINER_PRINCIAPL_ID
+        -var container_principal_id=$CONTAINER_PRINCIPAL_ID
