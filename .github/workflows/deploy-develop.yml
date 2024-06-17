@@ -94,10 +94,10 @@ jobs:
       run: |
         terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
         plan -no-color \
-        -var resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
-        -var storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
-        -var container_name=$BACKEND_CONTAINER_NAME \
-        -var key=$BACKEND_KEY \
+        -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
+        -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
+        -var backend_container_name=$BACKEND_CONTAINER_NAME \
+        -var backend_key=$BACKEND_KEY \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
@@ -123,10 +123,10 @@ jobs:
       run: |
         terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
         apply -auto-approve \
-        -var resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
-        -var storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
-        -var container_name=$BACKEND_CONTAINER_NAME \
-        -var key=$BACKEND_KEY \
+        -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
+        -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
+        -var backend_container_name=$BACKEND_CONTAINER_NAME \
+        -var backend_key=$BACKEND_KEY \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
