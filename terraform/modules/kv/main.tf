@@ -9,7 +9,7 @@ resource "azurerm_key_vault" "kv" {
 
 resource "azurerm_role_assignment" "backend_app_secret" {
   scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets Officer"
+  role_definition_name = "Key Vault Secret Officer"
   principal_id         = var.backend_principal_id
 }
 
@@ -21,18 +21,18 @@ resource "azurerm_role_assignment" "backend_app_cert" {
 
 resource "azurerm_role_assignment" "base_app_secret" {
   scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets Officer"
+  role_definition_name = "Key Vault Secret Officer"
   principal_id         = var.base_principal_id
 }
 
 resource "azurerm_role_assignment" "product_app_secret" {
   scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets Officer"
+  role_definition_name = "Key Vault Secret Officer"
   principal_id         = var.backend_principal_id
 }
 
 resource "azurerm_role_assignment" "container_app_secret" {
   scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets Officer"
+  role_definition_name = "Key Vault Secret Officer"
   principal_id         = var.container_principal_id
 }
