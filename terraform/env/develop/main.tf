@@ -35,10 +35,10 @@ locals {
   name_prefix = "dev"
 }
 
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
-}
+#resource "azurerm_resource_group" "rg" {
+#  name     = var.resource_group_name
+#  location = var.location
+#}
 
 module "keyvault" {
   source                 = "../../modules/kv"
