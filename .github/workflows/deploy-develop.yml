@@ -27,9 +27,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment: develop
-    defaults:
-      run:
-        working-directory: 'terraform/env/${{ env.ENVIRONMENT }}'
 
     steps:
     # Checkout the repository to the GitHub Actions runner
@@ -50,7 +47,8 @@ jobs:
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ vars.BACKEND_KEY }}
       run: |
-        terraform init \
+        terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
+        init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
         -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
         -backend-config="container_name=$BACKEND_CONTAINER_NAME" \
@@ -76,7 +74,8 @@ jobs:
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
-        terraform plan -no-color \
+        terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
+        plan -no-color \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
@@ -100,7 +99,8 @@ jobs:
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
-        terraform apply -auto-approve \
+        terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
+        apply -auto-approve \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
