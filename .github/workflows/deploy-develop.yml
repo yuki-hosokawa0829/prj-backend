@@ -39,6 +39,8 @@ jobs:
       with:
         terraform_version: ${{ env.TERRAFORM_VERSION }}
 
+    - name: test
+      run: ls -a
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       env:
@@ -47,7 +49,7 @@ jobs:
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ vars.BACKEND_KEY }}
       run: |
-        terraform \
+        terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
         init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
         -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
