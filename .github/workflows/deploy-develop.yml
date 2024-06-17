@@ -59,7 +59,7 @@ jobs:
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
-        terraform -chdir=terraform/env/${{ env.ENVIRONMENT }} \
+        terraform \
         init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
         -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
