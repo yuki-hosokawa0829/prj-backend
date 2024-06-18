@@ -35,7 +35,7 @@ jobs:
     environment: develop
     steps:
       - name: Deploy
-        uses: .github/actions/deploy
+        uses: ./.github/actions/deploy
 #jobs:
 #  call-reusable-workflow:
 #    uses: ./.github/workflows/deploy.yml
