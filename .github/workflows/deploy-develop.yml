@@ -28,7 +28,14 @@ env:
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
 
 jobs:
-  call-reusable-workflow:
-    uses: ./.github/workflows/deploy.yml
-    with:
-      ENVIRONMENT: develop
+  terraform-deploy:
+    runs-on: ubuntu-latest
+    environment: develop
+    steps:
+      - name: Deploy
+        uses: ./github/actions/deploy
+#jobs:
+#  call-reusable-workflow:
+#    uses: ./.github/workflows/deploy.yml
+#    with:
+#      ENVIRONMENT: develop
