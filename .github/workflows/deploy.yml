@@ -23,7 +23,7 @@ jobs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v2
       with:
-        terraform_version: ${{ inputs.TERRAFORM_VERSION }}
+        terraform_version: ${{ vars.TERRAFORM_VERSION }}
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
@@ -40,7 +40,7 @@ jobs:
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
-        terraform -chdir=terraform/env/${{ secrets.ENVIRONMENT }} \
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
         init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
         -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
@@ -74,7 +74,7 @@ jobs:
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
-        terraform -chdir=terraform/env/${{ secrets.ENVIRONMENT }} \
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
         plan -no-color \
         -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
@@ -103,7 +103,7 @@ jobs:
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
       run: |
-        terraform -chdir=terraform/env/${{ secrets.ENVIRONMENT }} \
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
         apply -auto-approve \
         -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
