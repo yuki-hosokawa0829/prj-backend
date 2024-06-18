@@ -34,8 +34,12 @@ jobs:
     runs-on: ubuntu-latest
     environment: develop
     steps:
-      - name: Deploy
-        uses: ./.github/actions/deploy
+      # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Deploy
+      uses: ./.github/actions/deploy
 #jobs:
 #  call-reusable-workflow:
 #    uses: ./.github/workflows/deploy.yml
