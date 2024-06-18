@@ -40,6 +40,19 @@ jobs:
 
     - name: Deploy
       uses: ./.github/actions/deploy
+      with:
+        ENVIRONMENT: develop
+        BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
+        BACKEND_KEY: ${{ vars.BACKEND_KEY }}
+        RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
+        LOCATION: ${{ vars.LOCATION }}
+        TENANT_ID: ${{ secrets.TENANT_ID }}
+        BACKEND_PRINCIPAL_ID: ${{ secrets.BACKEND_PRINCIPAL_ID }}
+        BASE_PRINCIPAL_ID: ${{ secrets.BASE_PRINCIPAL_ID }}
+        PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
+        CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
 #jobs:
 #  call-reusable-workflow:
 #    uses: ./.github/workflows/deploy.yml

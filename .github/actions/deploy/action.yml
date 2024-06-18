@@ -6,6 +6,50 @@ inputs:
     description: 'The environment to deploy to'
     required: true
 
+  BACKEND_RESOURCE_GROUP_NAME:
+    description: 'The name of the resource group to store the Terraform state file'
+    required: true
+
+  BACKEND_STORAGE_ACCOUNT_NAME:
+    description: 'The name of the storage account to store the Terraform state file'
+    required: true
+
+  BACKEND_CONTAINER_NAME:
+    description: 'The name of the container to store the Terraform state file'
+    required: true
+
+  BACKEND_KEY:
+    description: 'The name of the key to store the Terraform state file'
+    required: true
+
+  RESOURCE_GROUP_NAME:
+    description: 'The name of the resource group to deploy resources to'
+    required: true
+
+  LOCATION:
+    description: 'The location to deploy resources to'
+    required: true
+
+  TENANT_ID:
+    description: 'The Azure AD tenant ID'
+    required: true
+
+  BACKEND_PRINCIPAL_ID:
+    description: 'The principal ID of the service principal used to access the backend storage account'
+    required: true
+
+  BASE_PRINCIPAL_ID:
+    description: 'The principal ID of the service principal used to access the base resource group'
+    required: true
+
+  PRODUCT_PRINCIPAL_ID:
+    description: 'The principal ID of the service principal used to access the product resource group'
+    required: true
+
+  CONTAINER_PRINCIPAL_ID:
+    description: 'The principal ID of the service principal used to access the container resource group'
+    required: true
+
 runs:
   using: 'composite'
   steps:
