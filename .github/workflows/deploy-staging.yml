@@ -1,13 +1,13 @@
-name: 'Terraform Plan/Apply Develop'
+name: 'Terraform Plan/Apply'
 
 on:
   push:
     branches:
     - main
     paths:
-    - 'terraform/env/develop/**'
+    - 'terraform/env/staging/**'
     - 'terraform/modules/**'
-    - '.github/workflows/deploy-develop.yml'
+    - '.github/workflows/deploy-staging.yml'
     - '.github/workflows/deploy.yml'
     - '.github/actions/deploy/action.yml'
 
@@ -15,24 +15,24 @@ on:
     branches:
     - main
     paths:
-    - 'terraform/env/develop/**'
+    - 'terraform/env/staging/**'
     - 'terraform/modules/**'
-    - '.github/workflows/deploy-develop.yml'
+    - '.github/workflows/deploy-staging.yml'
     - '.github/workflows/deploy.yml'
     - '.github/actions/deploy/action.yml'
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:
-  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
-  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_DEVELOP }}
+  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID_STAGING }}
+  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_STAGING }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-  ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
+  ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_STAGING }}
 
 jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
-    environment: develop
+    environment: staging
     steps:
       # Checkout the repository to the GitHub Actions runner
     - name: Checkout
@@ -41,7 +41,7 @@ jobs:
     - name: Deploy
       uses: ./.github/actions/deploy
       with:
-        ENVIRONMENT: develop
+        ENVIRONMENT: staging
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
