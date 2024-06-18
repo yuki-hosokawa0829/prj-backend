@@ -7,32 +7,38 @@ resource "azurerm_key_vault" "kv" {
   enable_rbac_authorization = true
 }
 
-resource "azurerm_role_assignment" "backend_app_secret" {
+resource "azurerm_role_assignment" "backend_app_secret_officer" {
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = var.backend_principal_id
 }
 
-resource "azurerm_role_assignment" "backend_app_cert" {
+resource "azurerm_role_assignment" "backend_app_cert_officer" {
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Certificates Officer"
   principal_id         = var.backend_principal_id
 }
 
-resource "azurerm_role_assignment" "base_app_secret" {
+resource "azurerm_role_assignment" "base_app_secret_officer" {
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = var.base_principal_id
 }
 
-resource "azurerm_role_assignment" "product_app_secret" {
+resource "azurerm_role_assignment" "product_app_secret_officer" {
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = var.product_principal_id
 }
 
-resource "azurerm_role_assignment" "container_app_secret" {
+resource "azurerm_role_assignment" "product_app_cert_user" {
   scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets Officer"
+  role_definition_name = "Key Vault Certificate User"
+  principal_id         = var.product_principal_id
+}
+
+resource "azurerm_role_assignment" "container_app_secret_user" {
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets User"
   principal_id         = var.container_principal_id
 }
