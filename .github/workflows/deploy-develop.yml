@@ -9,6 +9,7 @@ on:
     - 'terraform/modules/**'
     - '.github/workflows/deploy-develop.yml'
     - '.github/workflows/deploy.yml'
+    - '.github/actions/deploy/action.yml'
 
   pull_request:
     branches:
@@ -18,6 +19,7 @@ on:
     - 'terraform/modules/**'
     - '.github/workflows/deploy-develop.yml'
     - '.github/workflows/deploy.yml'
+    - '.github/actions/deploy/action.yml'
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:

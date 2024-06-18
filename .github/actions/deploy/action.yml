@@ -1,10 +1,10 @@
 name: 'Deploy'
-
+description: 'Deploy Terraform configuration to Azure'
 
 inputs:
   ENVIRONMENT:
+    description: 'The environment to deploy to'
     required: true
-    type: string
 
 runs:
   using: 'composite'
@@ -21,6 +21,7 @@ runs:
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
+      shell: bash
       env:
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
@@ -51,10 +52,12 @@ runs:
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
     - name: Terraform Validate
+      shell: bash
       run: terraform validate -no-color
 
     #Terraform Plan
     - name: Terraform Plan
+      shell: bash
       env:
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
@@ -84,6 +87,7 @@ runs:
 
     # Terraform Apply
     - name: Terraform Apply
+      shell: bash
       env:
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
