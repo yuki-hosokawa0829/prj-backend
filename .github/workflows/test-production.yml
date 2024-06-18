@@ -24,7 +24,8 @@ jobs:
     if: ${{ startsWith(github.ref, 'refs/heads/feature/') && github.ref != 'refs/heads/main' && github.base_ref != 'refs/heads/main'}}
     steps:
     - name: Unknown Branch
-      run: exit 1
+      run: echo ${{ github.ref }} /
+        exit 1
 
   terraform-test:
     runs-on: ubuntu-latest
