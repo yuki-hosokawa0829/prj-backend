@@ -4,22 +4,6 @@ on:
   push:
     branches:
     - main
-    paths:
-    - 'terraform/env/develop/**'
-    - 'terraform/modules/**'
-    - '.github/workflows/deploy-develop.yml'
-    - '.github/workflows/deploy.yml'
-    - '.github/actions/deploy/action.yml'
-
-  pull_request:
-    branches:
-    - main
-    paths:
-    - 'terraform/env/develop/**'
-    - 'terraform/modules/**'
-    - '.github/workflows/deploy-develop.yml'
-    - '.github/workflows/deploy.yml'
-    - '.github/actions/deploy/action.yml'
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:
@@ -30,6 +14,17 @@ env:
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      IS_FEATURE_BRANCH: ${{ startsWith(github.ref, 'refs/heads/feature/') }}
+      IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main' }}
+    #if: ${{ env.IS_FEATURE_BRANCH != true && env.IS_MAIN_BRANCH != true }}
+    if: ${{ !startsWith(github.ref, 'refs/heads/feature/') && github.ref != 'refs/heads/main' && github.base_ref != 'refs/heads/main'}}
+    steps:
+    - name: Unknown Branch
+      run: exit 1
+
   terraform-deploy:
     runs-on: ubuntu-latest
     environment: develop

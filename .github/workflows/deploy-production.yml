@@ -3,7 +3,7 @@ name: 'Terraform Plan/Apply Production'
 on:
   push:
     branches:
-    - main
+    - production
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:
@@ -17,12 +17,10 @@ jobs:
   check:
     runs-on: ubuntu-latest
     env:
-      IS_FEATURE_BRANCH: ${{ startsWith(github.ref, 'refs/heads/feature/') }}
-      IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main' }}
-
-    #
-    #if: ${{ env.IS_FEATURE_BRANCH != true && env.IS_MAIN_BRANCH != true }}
-    if: ${{ !startsWith(github.ref, 'refs/heads/feature/') && github.ref != 'refs/heads/main' && github.base_ref != 'refs/heads/main'}}
+      #PRODUCTION_BRANCH: ${{ format('refs/heads/production/{0}'),  }}
+      IS_PRODUCTION_BRANCH: ${{ github.ref == 'refs/heads/production' || github.base_ref == 'refs/heads/production' }}
+    #if: ${{ env.IS_PRODUCTION_BRANCH != true }}
+    if: ${{ github.ref != 'refs/heads/production' && github.base_ref != 'refs/heads/production'}}
     steps:
     - name: Unknown Branch
       run: exit 1

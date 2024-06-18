@@ -3,23 +3,7 @@ name: 'Terraform Plan/Apply Staging'
 on:
   push:
     branches:
-    - main
-    paths:
-    - 'terraform/env/staging/**'
-    - 'terraform/modules/**'
-    - '.github/workflows/deploy-staging.yml'
-    - '.github/workflows/deploy.yml'
-    - '.github/actions/deploy/action.yml'
-
-  pull_request:
-    branches:
-    - main
-    paths:
-    - 'terraform/env/staging/**'
-    - 'terraform/modules/**'
-    - '.github/workflows/deploy-staging.yml'
-    - '.github/workflows/deploy.yml'
-    - '.github/actions/deploy/action.yml'
+    - pre-production
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:
@@ -30,6 +14,17 @@ env:
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_STAGING }}
 
 jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      #pre-production_BRANCH: ${{ format('refs/heads/pre-production/{0}'),  }}
+      IS_pre-production_BRANCH: ${{ github.ref == 'refs/heads/pre-production' || github.base_ref == 'refs/heads/pre-production' }}
+    #if: ${{ env.IS_pre-production_BRANCH != true }}
+    if: ${{ github.ref != 'refs/heads/pre-production' && github.base_ref != 'refs/heads/pre-production'}}
+    steps:
+    - name: Unknown Branch
+      run: exit 1
+
   terraform-deploy:
     runs-on: ubuntu-latest
     environment: staging
