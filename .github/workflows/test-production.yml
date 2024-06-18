@@ -17,11 +17,11 @@ jobs:
   check:
     runs-on: ubuntu-latest
     env:
-      IS_FEATURE_BRANCH: ${{ github.ref == 'refs/heads/feature/' }}
+      IS_FEATURE_BRANCH: ${{ startsWith(github.ref, 'refs/heads/feature/') }}
       IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main' }}
 
     #if: ${{ env.IS_FEATURE_BRANCH != true && env.IS_MAIN_BRANCH != true }}
-    if: ${{ github.ref != 'refs/heads/feature/' && github.ref != 'refs/heads/main' && github.base_ref != 'refs/heads/main'}}
+    if: ${{ startsWith(github.ref, 'refs/heads/feature/') && github.ref != 'refs/heads/main' && github.base_ref != 'refs/heads/main'}}
     steps:
     - name: Unknown Branch
       run: exit 1
