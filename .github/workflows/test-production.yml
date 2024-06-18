@@ -25,6 +25,7 @@ jobs:
     steps:
     - name: Unknown Branch
       run: echo ${{ github.ref }} /
+        echo ${{ startsWith(github.ref, 'refs/heads/feature/') }} /
         exit 1
 
   terraform-test:
