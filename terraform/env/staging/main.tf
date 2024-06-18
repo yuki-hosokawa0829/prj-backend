@@ -35,11 +35,6 @@ locals {
   name_prefix = "stg"
 }
 
-#resource "azurerm_resource_group" "rg" {
-#  name     = var.resource_group_name
-#  location = var.location
-#}
-
 module "keyvault" {
   source                 = "../../modules/kv"
   key_vault_name         = "${local.name_prefix}keyvaultcontainer"
