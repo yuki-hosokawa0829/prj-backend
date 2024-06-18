@@ -1,47 +1,46 @@
-name: 'Terraform Plan/Apply Staging'
+name: 'Terraform Test Production'
 
 on:
   push:
     branches:
-    - main
+    - feature/*
     paths:
-    - 'terraform/env/staging/**'
+    - 'terraform/env/production/**'
     - 'terraform/modules/**'
-    - '.github/workflows/deploy-staging.yml'
-    - '.github/workflows/deploy.yml'
-    - '.github/actions/deploy/action.yml'
+    - '.github/workflows/test-production.yml'
+    - '.github/actions/test/action.yml'
 
   pull_request:
     branches:
     - main
     paths:
-    - 'terraform/env/staging/**'
+    - 'terraform/env/production/**'
     - 'terraform/modules/**'
-    - '.github/workflows/deploy-staging.yml'
+    - '.github/workflows/deploy-production.yml'
     - '.github/workflows/deploy.yml'
     - '.github/actions/deploy/action.yml'
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:
-  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID_STAGING }}
-  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_STAGING }}
+  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID_PRODUCTION }}
+  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_PRODUCTION }}
   ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-  ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_STAGING }}
+  ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_PRODUCTION }}
 
 jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
-    environment: staging
+    environment: production
     steps:
       # Checkout the repository to the GitHub Actions runner
     - name: Checkout
       uses: actions/checkout@v4
 
     - name: Deploy
-      uses: ./.github/actions/deploy
+      uses: ./.github/actions/test
       with:
-        ENVIRONMENT: staging
+        ENVIRONMENT: production
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}

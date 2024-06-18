@@ -1,0 +1,130 @@
+name: 'Deploy'
+description: 'Deploy Terraform configuration to Azure'
+
+inputs:
+  ENVIRONMENT:
+    description: 'The environment to deploy to'
+    required: true
+
+  BACKEND_RESOURCE_GROUP_NAME:
+    description: 'The name of the resource group to store the Terraform state file'
+    required: true
+
+  BACKEND_STORAGE_ACCOUNT_NAME:
+    description: 'The name of the storage account to store the Terraform state file'
+    required: true
+
+  BACKEND_CONTAINER_NAME:
+    description: 'The name of the container to store the Terraform state file'
+    required: true
+
+  BACKEND_KEY:
+    description: 'The name of the key to store the Terraform state file'
+    required: true
+
+  RESOURCE_GROUP_NAME:
+    description: 'The name of the resource group to deploy resources to'
+    required: true
+
+  LOCATION:
+    description: 'The location to deploy resources to'
+    required: true
+
+  TENANT_ID:
+    description: 'The Azure AD tenant ID'
+    required: true
+
+  BACKEND_PRINCIPAL_ID:
+    description: 'The principal ID of the service principal used to access the backend storage account'
+    required: true
+
+  BASE_PRINCIPAL_ID:
+    description: 'The principal ID of the service principal used to access the base resource group'
+    required: true
+
+  PRODUCT_PRINCIPAL_ID:
+    description: 'The principal ID of the service principal used to access the product resource group'
+    required: true
+
+  CONTAINER_PRINCIPAL_ID:
+    description: 'The principal ID of the service principal used to access the container resource group'
+    required: true
+
+runs:
+  using: 'composite'
+  steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: ${{ inputs.TERRAFORM_VERSION }}
+
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      shell: bash
+      env:
+        BACKEND_RESOURCE_GROUP_NAME: ${{ inputs.BACKEND_RESOURCE_GROUP_NAME }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ inputs.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
+        BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
+        RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
+        LOCATION: ${{ inputs.LOCATION }}
+        TENANT_ID: ${{ inputs.TENANT_ID }}
+        BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
+        BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
+        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
+        CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
+      run: |
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
+        init \
+        -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
+        -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
+        -backend-config="container_name=$BACKEND_CONTAINER_NAME" \
+        -backend-config="key=$BACKEND_KEY" \
+        -var resource_group_name=$RESOURCE_GROUP_NAME \
+        -var location=$LOCATION \
+        -var tenant_id=$TENANT_ID \
+        -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
+        -var base_principal_id=$BASE_PRINCIPAL_ID \
+        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
+        -var container_principal_id=$CONTAINER_PRINCIPAL_ID
+
+    # Checks that all Terraform configuration files adhere to a canonical format
+    # Will fail the build if not
+    - name: Terraform Validate
+      shell: bash
+      run: terraform validate -no-color
+
+    #Terraform Plan
+    - name: Terraform Plan
+      shell: bash
+      env:
+        BACKEND_RESOURCE_GROUP_NAME: ${{ inputs.BACKEND_RESOURCE_GROUP_NAME }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ inputs.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
+        BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
+        RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
+        LOCATION: ${{ inputs.LOCATION }}
+        TENANT_ID: ${{ inputs.TENANT_ID }}
+        BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
+        BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
+        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
+        CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
+      run: |
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
+        plan -no-color \
+        -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
+        -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
+        -var backend_container_name=$BACKEND_CONTAINER_NAME \
+        -var backend_key=$BACKEND_KEY \
+        -var resource_group_name=$RESOURCE_GROUP_NAME \
+        -var location=$LOCATION \
+        -var tenant_id=$TENANT_ID \
+        -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
+        -var base_principal_id=$BASE_PRINCIPAL_ID \
+        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
+        -var container_principal_id=$CONTAINER_PRINCIPAL_ID
