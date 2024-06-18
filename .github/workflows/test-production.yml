@@ -29,7 +29,7 @@ env:
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_PRODUCTION }}
 
 jobs:
-  terraform-deploy:
+  terraform-test:
     runs-on: ubuntu-latest
     environment: production
     steps:
