@@ -29,6 +29,6 @@ env:
 
 jobs:
   call-reusable-workflow:
-    uses: ./.github/workflows/template/deploy.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       ENVIRONMENT: 'develop'
