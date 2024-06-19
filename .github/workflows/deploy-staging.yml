@@ -12,15 +12,14 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_STAGING }}
+  #PRE-PRODUCTION_BRANCH: ${{ format('refs/heads/pre-production/{0}', 'hoge') }}
+  #IS_PRE-PRODUCTION_BRANCH: ${{ github.ref == env.PRE-PRODUCTION_BRANCH || github.base_ref == env.PRE-PRODUCTION_BRANCH }}
 
 jobs:
   check:
     runs-on: ubuntu-latest
-    env:
-      #pre-production_BRANCH: ${{ format('refs/heads/pre-production/{0}'),  }}
-      IS_pre-production_BRANCH: ${{ github.ref == 'refs/heads/pre-production' || github.base_ref == 'refs/heads/pre-production' }}
-    #if: ${{ env.IS_pre-production_BRANCH != true }}
-    if: ${{ github.ref != 'refs/heads/pre-production' && github.base_ref != 'refs/heads/pre-production'}}
+    #if: ${{ !env.IS_PRE-PRODUCTION_BRANCH }}
+    if: ${{ github.ref != format('refs/heads/pre-production/{0}', 'hoge') && github.base_ref != format('refs/heads/pre-production/{0}', 'hoge') }}
     steps:
     - name: Unknown Branch
       run: exit 1
@@ -28,6 +27,7 @@ jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     environment: staging
+    if: ${{ github.ref == format('refs/heads/pre-production/{0}', 'hoge') || github.base_ref == format('refs/heads/pre-production/{0}', 'hoge') }}
     steps:
       # Checkout the repository to the GitHub Actions runner
     - name: Checkout

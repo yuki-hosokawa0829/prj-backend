@@ -12,14 +12,13 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
+  #IS_FEATURE_BRANCH: ${{ startsWith(github.ref, 'refs/heads/feature/') }}
+  #IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main' }}
 
 jobs:
   check:
     runs-on: ubuntu-latest
-    env:
-      IS_FEATURE_BRANCH: ${{ startsWith(github.ref, 'refs/heads/feature/') }}
-      IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main' }}
-    #if: ${{ env.IS_FEATURE_BRANCH != true && env.IS_MAIN_BRANCH != true }}
+    #if: ${{ !env.IS_FEATURE_BRANCH && !env.IS_MAIN_BRANCH }}
     if: ${{ !startsWith(github.ref, 'refs/heads/feature/') && github.ref != 'refs/heads/main' && github.base_ref != 'refs/heads/main'}}
     steps:
     - name: Unknown Branch
@@ -28,6 +27,7 @@ jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     environment: develop
+    if: ${{ startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main'}}
     steps:
       # Checkout the repository to the GitHub Actions runner
     - name: Checkout

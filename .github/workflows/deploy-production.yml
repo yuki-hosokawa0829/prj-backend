@@ -12,15 +12,14 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_PRODUCTION }}
+  #PRODUCTION_BRANCH: ${{ format('refs/heads/production/{0}', 'hoge') }}
+  #IS_PRODUCTION_BRANCH: ${{ github.ref == env.PRODUCTION_BRANCH || github.base_ref == PRODUCTION_BRANCH }}
 
 jobs:
   check:
     runs-on: ubuntu-latest
-    env:
-      #PRODUCTION_BRANCH: ${{ format('refs/heads/production/{0}'),  }}
-      IS_PRODUCTION_BRANCH: ${{ github.ref == 'refs/heads/production' || github.base_ref == 'refs/heads/production' }}
     #if: ${{ env.IS_PRODUCTION_BRANCH != true }}
-    if: ${{ github.ref != 'refs/heads/production' && github.base_ref != 'refs/heads/production'}}
+    if: ${{ github.ref != format('refs/heads/production/{0}', 'hoge') && github.base_ref != format('refs/heads/production/{0}', 'hoge') }}
     steps:
     - name: Unknown Branch
       run: exit 1
@@ -28,6 +27,7 @@ jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     environment: production
+    if: ${{ github.ref == format('refs/heads/production/{0}', 'hoge') || github.base_ref == format('refs/heads/production/{0}', 'hoge') }}
     steps:
       # Checkout the repository to the GitHub Actions runner
     - name: Checkout
