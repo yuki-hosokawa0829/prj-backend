@@ -46,3 +46,13 @@ module "keyvault" {
   product_principal_id   = var.product_principal_id
   container_principal_id = var.container_principal_id
 }
+
+module "secret" {
+  source              = "../../modules/secret"
+  key_vault_name      = "${local.name_prefix}keyvaultcontainer"
+  resource_group_name = var.resource_group_name
+
+  depends_on = [
+    module.keyvault
+  ]
+}
