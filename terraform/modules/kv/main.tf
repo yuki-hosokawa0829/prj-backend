@@ -1,10 +1,11 @@
 resource "azurerm_key_vault" "kv" {
-  name                      = var.key_vault_name
-  resource_group_name       = var.resource_group_name
-  location                  = var.location
-  sku_name                  = "standard"
-  tenant_id                 = var.tenant_id
-  enable_rbac_authorization = true
+  name                       = var.key_vault_name
+  resource_group_name        = var.resource_group_name
+  location                   = var.location
+  sku_name                   = "standard"
+  tenant_id                  = var.tenant_id
+  enable_rbac_authorization  = true
+  soft_delete_retention_days = 7
 }
 
 resource "azurerm_role_assignment" "backend_app_secret_officer" {
