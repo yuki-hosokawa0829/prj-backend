@@ -61,6 +61,7 @@ function CreateSecret {
 
   foreach ($EnterpriseAppName in $EnterpriseAppNameList) {
     $Application = Get-AzADApplication -DisplayName $EnterpriseAppName
+    $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $Application.AppId
     $Secret = Get-AzADAppCredential -ObjectId $Application.Id -ErrorAction SilentlyContinue
 
     if ($null -eq $Secret) {
@@ -69,6 +70,7 @@ function CreateSecret {
         EnterpriseAppName = $EnterpriseAppName
         ARM_CLIENT_ID = $Application.AppId
         ARM_CLIENT_SECRET = $Secret.SecretText
+        SERVICE_PRINCIPAL_ID = $ServicePrincipal.Id
       }
 
       $SecretList | Export-Csv -Path $PathToCsv -NoTypeInformation -Encoding UTF8
@@ -200,8 +202,8 @@ function AssignRBACAdministerRoleToServicePrincipal {
   }
 
   # Create Condition for Role Assignment to manage IAM setting of Key Vault
-  $ServicePrincipals = $ServicePrincipalIdList -join ", "
-  $Condition = "((!(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})) OR (@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {$RoleDefinitionIds} AND @Request[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {$ServicePrincipals})) AND ((!(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})) OR (@Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {$RoleDefinitionIds} AND @Resource[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {$ServicePrincipals}))"
+  $ServicePrincipalIds = $ServicePrincipalIdList -join ", "
+  $Condition = "((!(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})) OR (@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {$RoleDefinitionIds} AND @Request[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {$ServicePrincipalIds})) AND ((!(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})) OR (@Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {$RoleDefinitionIds} AND @Resource[Microsoft.Authorization/roleAssignments:PrincipalId] ForAnyOfAnyValues:GuidEquals {$ServicePrincipalIds}))"
   $RoleAssginment = Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipalIdList[0] -RoleDefinitionName "Role Based Access Control Administrator"
 
   if ($null -eq $RoleAssginment) {
@@ -209,6 +211,35 @@ function AssignRBACAdministerRoleToServicePrincipal {
   }
 }
 
+function AddFederatedCredential {
+  param (
+    [string] $OrganizationName,
+    [string] $RepositoryNameForContainerProject,
+    [String[]] $EnterpriseAppNameList
+  )
+
+  # Add Federated Credential to connect to Azure by Github Actions
+  foreach ($EnterpriseAppName in $EnterpriseAppNameList) {
+
+    if ($EnterpriseAppName -match "Container") {
+
+      if ($EnterpriseAppName -match "Develop") {
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Develop"
+      } elseif ($EnterpriseAppName -match "Staging") {
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Staging"
+      } else {
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Production"
+      }
+
+      $ApplicationObjectId = (Get-AzADApplication -DisplayName $EnterpriseAppName).Id
+      $FederatedCredentialName = (Get-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId).Name
+
+      if ($FederatedCredentialName -ne "GithubActions") {
+        New-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId -Audience "api://AzureADTokenExchange" -Issuer "https://token.actions.githubusercontent.com/" -Name "GitHubActions" -Subject $Subject
+      }
+    }
+  }
+}
 
 # Login to Azure
 Connect-AzAccount -Subscription $SubscriptionId -Tenant $TenantId
@@ -237,25 +268,8 @@ CreateStorageContainer -Environment $Environment -ResourceGroupName $ResourceGro
 # Assign Contributor Role to Service Principal over Storage Container
 AssignRoleOverStorageContainer -SubscriptionId $SubscriptionId -Environment $Environment -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupName $ResourceGroupNameForBackend -StorageAccountName $StorageAccountName -StorageContainerNameList $StorageContainerNameList
 
+# Assign RBAC Administer Role to Service Principal
 AssignRBACAdministerRoleToServicePrincipal -SubscriptionId $SubscriptionId -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupName $ResourceGroupNameForBackend -RoleDefinitionIds $RoleDefinitionIds
 
 # Add Federated Credential to connect to Azure by Github Actions
-for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
-
-  if ($EnterpriseAppNameList[$i] -match "Container") {
-
-    if ($EnterpriseAppNameList[$i] -match "Develop") {
-      $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Develop"
-    } elseif ($EnterpriseAppNameList[$i] -match "Staging") {
-      $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Staging"
-    } else {
-      $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Production"
-    }
-
-    $FederatedCredentialName = (Get-AzADAppFederatedCredential -ApplicationObjectId (Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]).Id).Name
-
-    if ($FederatedCredentialName -ne "GithubActions") {
-      New-AzADAppFederatedCredential -ApplicationObjectId (Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]).Id -Audience "api://AzureADTokenExchange" -Issuer "https://token.actions.githubusercontent.com/" -Name "GitHubActions" -Subject $Subject
-    }
-  }
-}
+AddFederatedCredential -OrganizationName $OrganizationName -RepositoryNameForContainerProject $RepositoryNameForContainerProject -EnterpriseAppNameList $EnterpriseAppNameList
