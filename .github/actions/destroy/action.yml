@@ -1,5 +1,5 @@
-name: 'Test'
-description: 'Test Terraform configuration to Azure'
+name: 'Destroy'
+description: 'Destroy Terraform configuration to Azure'
 
 inputs:
   ENVIRONMENT:
@@ -93,14 +93,8 @@ runs:
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID
 
-    # Checks that all Terraform configuration files adhere to a canonical format
-    # Will fail the build if not
-    - name: Terraform Validate
-      shell: bash
-      run: terraform validate -no-color
-
     #Terraform Plan
-    - name: Terraform Plan
+    - name: Terraform Destroy
       shell: bash
       env:
         BACKEND_RESOURCE_GROUP_NAME: ${{ inputs.BACKEND_RESOURCE_GROUP_NAME }}
@@ -116,7 +110,7 @@ runs:
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
-        plan -no-color \
+        destroy -auto-apporve \
         -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
         -var backend_container_name=$BACKEND_CONTAINER_NAME \
