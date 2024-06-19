@@ -3,7 +3,7 @@ name: 'Terraform Plan/Apply Production'
 on:
   push:
     branches:
-    - production
+    - production/*
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:

@@ -3,7 +3,7 @@ name: 'Terraform Plan/Apply Staging'
 on:
   push:
     branches:
-    - pre-production
+    - pre-production/*
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
 env:
