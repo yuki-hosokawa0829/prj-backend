@@ -1,5 +1,5 @@
 ### Environment
-$global:Environment = "Develop"
+$global:Environment = "Develop" # "Develop", "Staging", "Production"
 
 ### Azure Resource
 $global:SubscriptionId = "caa6074c-280f-4787-856a-219fd5467ee0"
@@ -30,8 +30,8 @@ $global:StorageContainerNameList = @(
                                 "product" + $Environment.ToLower()
                                 )
 
-# Role Definition IDs(Key Vault Secet User, Key Vault Secret Officer, Key Vault Certificate Officer)
-$global:RoleDefinitionIds = "4633458b-17de-408a-b874-0445c86b69e6, b86a8fe4-44ce-4948-aee5-eccb2c155cd7, a4417e6f-fecd-4de8-b567-7b0420556985"
+# Role Definition IDs(Key Vault Secet User, Key Vault Secret Officer, Key Vault Certificate User, Key Vault Certificates Officer)
+$global:RoleDefinitionIds = "4633458b-17de-408a-b874-0445c86b69e6, b86a8fe4-44ce-4948-aee5-eccb2c155cd7, db79e9a7-68ee-4b58-9aeb-b90e7c24fcba, a4417e6f-fecd-4de8-b567-7b0420556985"
 
 ### GitHub
 $global:OrganizationName = "yuki-hosokawa0829"
