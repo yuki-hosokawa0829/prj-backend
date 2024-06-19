@@ -116,7 +116,8 @@ runs:
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
-        plan -no-color \
+        plan \
+        -no-color \
         -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
         -var backend_container_name=$BACKEND_CONTAINER_NAME \
@@ -146,7 +147,9 @@ runs:
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
-        apply -auto-approve \
+        apply \
+        -no-color \
+        -auto-approve \
         -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
         -var backend_container_name=$BACKEND_CONTAINER_NAME \

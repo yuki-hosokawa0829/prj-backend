@@ -94,6 +94,38 @@ runs:
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID
 
     #Terraform Plan
+    - name: Terraform Plan
+      shell: bash
+      env:
+        BACKEND_RESOURCE_GROUP_NAME: ${{ inputs.BACKEND_RESOURCE_GROUP_NAME }}
+        BACKEND_STORAGE_ACCOUNT_NAME: ${{ inputs.BACKEND_STORAGE_ACCOUNT_NAME }}
+        BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
+        BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
+        RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
+        LOCATION: ${{ inputs.LOCATION }}
+        TENANT_ID: ${{ inputs.TENANT_ID }}
+        BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
+        BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
+        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
+        CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
+      run: |
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
+        plan \
+        -no-color \
+        -destroy \
+        -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
+        -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
+        -var backend_container_name=$BACKEND_CONTAINER_NAME \
+        -var backend_key=$BACKEND_KEY \
+        -var resource_group_name=$RESOURCE_GROUP_NAME \
+        -var location=$LOCATION \
+        -var tenant_id=$TENANT_ID \
+        -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
+        -var base_principal_id=$BASE_PRINCIPAL_ID \
+        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
+        -var container_principal_id=$CONTAINER_PRINCIPAL_ID
+
+    #Terraform Plan
     - name: Terraform Destroy
       shell: bash
       env:
@@ -110,7 +142,9 @@ runs:
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
-        destroy -auto-apporve \
+        destroy \
+        -no-color \
+        -auto-approve \
         -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
         -var backend_container_name=$BACKEND_CONTAINER_NAME \

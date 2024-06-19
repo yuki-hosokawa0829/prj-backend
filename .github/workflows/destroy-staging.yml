@@ -1,4 +1,4 @@
-name: 'Terraform Destroy staging'
+name: 'Terraform Destroy Staging'
 
 on:
   workflow_dispatch:
@@ -32,7 +32,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: Destroy
-      uses: ./.github/actions/destory
+      uses: ./.github/actions/destroy
       with:
         ENVIRONMENT: staging
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
