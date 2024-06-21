@@ -127,8 +127,8 @@ runs:
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
-        -var container_principal_id=$CONTAINER_PRINCIPAL_ID
-        -var secret_name_list=$SECRET_NAME_LIST
+        -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
+        -var secret_name_list=$SECRET_NAME_LIST \
         -var secret_value_list=$SECRET_VALUE_LIST
 
     # Checks that all Terraform configuration files adhere to a canonical format
@@ -168,8 +168,8 @@ runs:
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
-        -var container_principal_id=$CONTAINER_PRINCIPAL_ID
-        -var secret_name_list=$SECRET_NAME_LIST
+        -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
+        -var secret_name_list=$SECRET_NAME_LIST \
         -var secret_value_list=$SECRET_VALUE_LIST
 
     # Terraform Apply
@@ -204,6 +204,6 @@ runs:
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
-        -var container_principal_id=$CONTAINER_PRINCIPAL_ID
-        -var secret_name_list=$SECRET_NAME_LIST
+        -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
+        -var secret_name_list=$SECRET_NAME_LIST \
         -var secret_value_list=$SECRET_VALUE_LIST
