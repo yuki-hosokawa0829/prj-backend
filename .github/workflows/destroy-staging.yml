@@ -35,6 +35,7 @@ jobs:
       uses: ./.github/actions/destroy
       with:
         ENVIRONMENT: staging
+        TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
