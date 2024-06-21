@@ -29,6 +29,9 @@ jobs:
     environment: develop
     if: ${{ startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main'}}
     steps:
+      # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v4
 
     - name: Deploy
       uses: ./.github/actions/deploy
