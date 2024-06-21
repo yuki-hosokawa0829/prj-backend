@@ -33,6 +33,16 @@ variable "container_principal_id" {
   type        = string
 }
 
+variable "secret_name_list" {
+  description = "The name of the secret."
+  type        = string
+}
+
+variable "secret_value_list" {
+  description = "The value of the secret."
+  type        = string
+}
+
 variable "backend_resource_group_name" {
   description = "The name of the resource group in which the backend resources are located."
   type        = string

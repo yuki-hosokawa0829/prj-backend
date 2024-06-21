@@ -4,7 +4,7 @@ data "azurerm_key_vault" "kv" {
 }
 
 resource "azurerm_key_vault_secret" "secret" {
-  name         = "ExampleSecret"
-  value        = "SuperSecretValue"
+  name         = var.secret_name_list
+  value        = var.secret_value_list
   key_vault_id = data.azurerm_key_vault.kv.id
 }
