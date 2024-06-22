@@ -51,6 +51,8 @@ module "secret" {
   source              = "../../modules/secret"
   key_vault_name      = "${local.name_prefix}keyvaultcontainer"
   resource_group_name = var.resource_group_name
+  secret_name_list    = var.secret_name_list
+  secret_value_list   = var.secret_value_list
 
   depends_on = [
     module.keyvault

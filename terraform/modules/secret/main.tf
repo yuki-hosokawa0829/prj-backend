@@ -3,8 +3,17 @@ data "azurerm_key_vault" "kv" {
   resource_group_name = var.resource_group_name
 }
 
+resource "terraform_data" "secret_name_list" {
+  input = split(",", var.secret_name_list)
+}
+
+resource "terraform_data" "secret_value_list" {
+  input = split(",", replace(var.secret_value_list, "\r", ""))
+}
+
 resource "azurerm_key_vault_secret" "secret" {
-  name         = "ExampleSecret"
-  value        = "SuperSecretValue"
+  count        = length(terraform_data.secret_name_list)
+  name         = terraform_data.secret_name_list.output[count.index]
+  value        = terraform_data.secret_value_list.output[count.index]
   key_vault_id = data.azurerm_key_vault.kv.id
 }
