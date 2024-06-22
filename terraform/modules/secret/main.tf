@@ -13,7 +13,7 @@ resource "terraform_data" "secret_value_list" {
 
 resource "azurerm_key_vault_secret" "secret" {
   count        = length(terraform_data.secret_name_list)
-  name         = terraform_data.secret_name_list[count.index].value
-  value        = terraform_data.secret_value_list[count.index].value
+  name         = terraform_data.secret_name_list.output[count.index]
+  value        = terraform_data.secret_value_list.output[count.index]
   key_vault_id = data.azurerm_key_vault.kv.id
 }
