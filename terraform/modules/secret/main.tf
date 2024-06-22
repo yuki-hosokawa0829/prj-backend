@@ -18,6 +18,6 @@ resource "azurerm_key_vault_secret" "secret" {
   key_vault_id = data.azurerm_key_vault.kv.id
 }
 
-output "secrets" {
-  value = azurerm_key_vault_secret.secret[*].value
-}
+#output "secrets" {
+#  value = azurerm_key_vault_secret.secret[*].value
+#}
