@@ -17,3 +17,7 @@ resource "azurerm_key_vault_secret" "secret" {
   value        = terraform_data.secret_value_list.output[count.index]
   key_vault_id = data.azurerm_key_vault.kv.id
 }
+
+output "secrets" {
+  value = azurerm_key_vault_secret.secret[*].value
+}
