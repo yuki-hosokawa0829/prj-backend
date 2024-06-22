@@ -96,8 +96,8 @@ runs:
             echo "secret_name: ${secret_name[$i]}, secret_value: ${secret_value[$i]}"
           done
 
-          echo "SECRET_NAME_LIST=$secret_name" >> "GITHUB_OUTPUT"
-          echo "SECRET_VALUE_LIST=$secret_value" >> "GITHUB_OUTPUT"
+          echo "SECRET_NAME_LIST=$secret_name" >> "$GITHUB_OUTPUT"
+          echo "SECRET_VALUE_LIST=$secret_value" >> "$GITHUB_OUTPUT"
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
