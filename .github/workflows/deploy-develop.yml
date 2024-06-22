@@ -15,6 +15,10 @@ env:
   #IS_FEATURE_BRANCH: ${{ startsWith(github.ref, 'refs/heads/feature/') }}
   #IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main' }}
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -38,6 +42,7 @@ jobs:
       with:
         ENVIRONMENT: develop
         TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}

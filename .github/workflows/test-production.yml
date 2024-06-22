@@ -29,11 +29,12 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
-    - name: Deploy
+    - name: Test
       uses: ./.github/actions/test
       with:
         ENVIRONMENT: production
         TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID_PRODUCTION }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}

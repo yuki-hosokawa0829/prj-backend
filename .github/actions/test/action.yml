@@ -10,6 +10,10 @@ inputs:
     description: 'The version of Terraform to use'
     required: true
 
+  CLIENT_ID:
+    description: 'The client ID of the service principal used to access the backend storage account'
+    required: true
+
   BACKEND_RESOURCE_GROUP_NAME:
     description: 'The name of the resource group to store the Terraform state file'
     required: true
@@ -58,10 +62,6 @@ inputs:
     description: 'The principal ID of the service principal used to access the container resource group'
     required: true
 
-  CLIENT_ID:
-    description: 'The client ID of the service principal used to access the backend storage account'
-    required: true
-
 runs:
   using: 'composite'
   steps:
@@ -72,7 +72,7 @@ runs:
         tenant-id: ${{ inputs.TENANT_ID }}
         subscription-id: ${{ inputs.SUBSCRIPTION_ID }}
 
-    - name: Set Secret
+    - name: List Secret
       id: list-secret
       uses: azure/cli@v2
       with:

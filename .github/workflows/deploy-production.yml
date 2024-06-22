@@ -15,6 +15,10 @@ env:
   #PRODUCTION_BRANCH: ${{ format('refs/heads/production/{0}', 'hoge') }}
   #IS_PRODUCTION_BRANCH: ${{ github.ref == env.PRODUCTION_BRANCH || github.base_ref == PRODUCTION_BRANCH }}
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
@@ -38,6 +42,7 @@ jobs:
       with:
         ENVIRONMENT: production
         TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID_PRODUCTION }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
