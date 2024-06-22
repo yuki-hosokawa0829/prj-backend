@@ -8,6 +8,25 @@ resource "azurerm_key_vault" "kv" {
   soft_delete_retention_days = 7
 }
 
+resource "terraform_data" "secret_name_list" {
+  input = split(",", var.secret_name_list)
+}
+
+resource "terraform_data" "secret_value_list" {
+  input = split(",", replace(var.secret_value_list, "\r", ""))
+}
+
+resource "azurerm_key_vault_secret" "secret" {
+  count        = length(terraform_data.secret_name_list)
+  name         = terraform_data.secret_name_list.output[count.index]
+  value        = terraform_data.secret_value_list.output[count.index]
+  key_vault_id = azurerm_key_vault.kv.id
+}
+
+#output "secrets" {
+#  value = azurerm_key_vault_secret.secret[*].value
+#}
+
 resource "azurerm_role_assignment" "backend_app_secret_officer" {
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"
