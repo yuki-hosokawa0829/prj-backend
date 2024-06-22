@@ -214,6 +214,7 @@ function AssignRBACAdministerRoleToServicePrincipal {
 function AddFederatedCredential {
   param (
     [string] $OrganizationName,
+    [string] $RepositoryNameForBackendProject,
     [string] $RepositoryNameForContainerProject,
     [String[]] $EnterpriseAppNameList
   )
@@ -221,14 +222,31 @@ function AddFederatedCredential {
   # Add Federated Credential to connect to Azure by Github Actions
   foreach ($EnterpriseAppName in $EnterpriseAppNameList) {
 
-    if ($EnterpriseAppName -match "Container") {
+    if ($EnterpriseAppName -match "Backend") {
 
       if ($EnterpriseAppName -match "Develop") {
-        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Develop"
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForBackendProject + ":environment:develop"
       } elseif ($EnterpriseAppName -match "Staging") {
-        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Staging"
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForBackendProject + ":environment:staging"
       } else {
-        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:Production"
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForBackendProject + ":environment:production"
+      }
+
+      $ApplicationObjectId = (Get-AzADApplication -DisplayName $EnterpriseAppName).Id
+      $FederatedCredentialName = (Get-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId).Name
+
+      if ($FederatedCredentialName -ne "GithubActions") {
+        New-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId -Audience "api://AzureADTokenExchange" -Issuer "https://token.actions.githubusercontent.com/" -Name "GitHubActions" -Subject $Subject
+      }
+
+    } elseif ($EnterpriseAppName -match "Container") {
+
+      if ($EnterpriseAppName -match "Develop") {
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:develop"
+      } elseif ($EnterpriseAppName -match "Staging") {
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:staging"
+      } else {
+        $Subject = "repo:" + $OrganizationName + "/" + $RepositoryNameForContainerProject + ":environment:production"
       }
 
       $ApplicationObjectId = (Get-AzADApplication -DisplayName $EnterpriseAppName).Id
@@ -272,4 +290,4 @@ AssignRoleOverStorageContainer -SubscriptionId $SubscriptionId -Environment $Env
 AssignRBACAdministerRoleToServicePrincipal -SubscriptionId $SubscriptionId -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupName $ResourceGroupNameForBackend -RoleDefinitionIds $RoleDefinitionIds
 
 # Add Federated Credential to connect to Azure by Github Actions
-AddFederatedCredential -OrganizationName $OrganizationName -RepositoryNameForContainerProject $RepositoryNameForContainerProject -EnterpriseAppNameList $EnterpriseAppNameList
+AddFederatedCredential -OrganizationName $OrganizationName -RepositoryNameForBackendProject $RepositoryNameForBackendProject -RepositoryNameForContainerProject $RepositoryNameForContainerProject -EnterpriseAppNameList $EnterpriseAppNameList
