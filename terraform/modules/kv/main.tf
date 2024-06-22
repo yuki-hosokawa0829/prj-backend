@@ -63,6 +63,10 @@ resource "azurerm_key_vault_secret" "secret" {
   ]
 }
 
-#output "secrets" {
-#  value = azurerm_key_vault_secret.secret[*].value
-#}
+output "secrets" {
+  value = azurerm_key_vault_secret.secret[*].value
+}
+
+output "length" {
+  value = length(terraform_data.secret_name_list)
+}
