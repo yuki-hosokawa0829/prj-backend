@@ -8,11 +8,11 @@ resource "terraform_data" "secret_name_list" {
 }
 
 resource "terraform_data" "secret_value_list" {
-  input = split(",", var.secret_value_list)
+  input = split(",", replace(var.secret_value_list, "\r", ""))
 }
 
 resource "azurerm_key_vault_secret" "secret" {
-  count       = length(terraform_data.secret_name_list)
+  count        = length(terraform_data.secret_name_list)
   name         = terraform_data.secret_name_list[count.index].value
   value        = terraform_data.secret_value_list[count.index].value
   key_vault_id = data.azurerm_key_vault.kv.id
