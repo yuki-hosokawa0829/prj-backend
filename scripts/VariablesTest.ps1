@@ -1,5 +1,5 @@
 ### Environment
-$global:Environment = "Develop" # "Develop", "Staging", "Production"
+$global:Environment = "Production" # "Develop", "Staging", "Production"
 
 ### Azure Resource
 $global:SubscriptionId = "caa6074c-280f-4787-856a-219fd5467ee0"
@@ -35,6 +35,7 @@ $global:RoleDefinitionIds = "4633458b-17de-408a-b874-0445c86b69e6, b86a8fe4-44ce
 
 ### GitHub
 $global:OrganizationName = "yuki-hosokawa0829"
+$global:RepositoryNameForBackendProject = "prj-backend"
 $global:RepositoryNameForContainerProject = "prj-container"
 
 ### File Path to Export CSV File
