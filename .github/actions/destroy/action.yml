@@ -42,6 +42,10 @@ inputs:
     description: 'The Azure AD tenant ID'
     required: true
 
+  SUBSCRIPTION_ID:
+    description: 'The Azure subscription ID'
+    required: true
+
   BACKEND_PRINCIPAL_ID:
     description: 'The principal ID of the service principal used to access the backend storage account'
     required: true
