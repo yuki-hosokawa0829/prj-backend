@@ -10,6 +10,10 @@ inputs:
     description: 'The version of Terraform to use'
     required: true
 
+  K8S_VERSION:
+    description: 'The version of Kubernetes to use'
+    required: false
+
   CLIENT_ID:
     description: 'The client ID of the service principal used to access the backend storage account'
     required: true

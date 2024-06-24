@@ -47,3 +47,8 @@ variable "terraform_version" {
   description = "The version of Terraform"
   type        = string
 }
+
+variable "k8s_version" {
+  description = "The version of Kubernetes"
+  type        = string
+}

@@ -29,6 +29,16 @@ resource "azurerm_key_vault_secret" "terraform_version" {
   ]
 }
 
+resource "azurerm_key_vault_secret" "k8s_version" {
+  name         = "K8sVersion"
+  value        = var.k8s_version
+  key_vault_id = azurerm_key_vault.kv.id
+
+  depends_on = [
+    azurerm_role_assignment.backend_app_secret_officer
+  ]
+}
+
 resource "azurerm_role_assignment" "backend_app_secret_officer" {
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"

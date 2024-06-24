@@ -43,6 +43,7 @@ module "keyvault" {
   key_vault_name         = "${local.name_prefix}keyvaultcontainer"
   secret_map             = local.secret_map
   terraform_version      = var.terraform_version
+  k8s_version            = var.k8s_version
   resource_group_name    = var.resource_group_name
   location               = var.location
   tenant_id              = var.tenant_id
