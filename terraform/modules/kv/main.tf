@@ -54,11 +54,3 @@ resource "azurerm_role_assignment" "container_app_secret_user" {
   role_definition_name = "Key Vault Secrets User"
   principal_id         = var.container_principal_id
 }
-
-output "secrets" {
-  value = azurerm_key_vault_secret.secret[*].value
-}
-
-output "length" {
-  value = length(terraform_data.secret_name_list)
-}
