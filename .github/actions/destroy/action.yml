@@ -94,7 +94,7 @@ runs:
           secret_value=()
 
           # download csv file from azure storage(BOM is not supported)
-          az storage blob download --container-name backenddevelop --account-name stotfstatedevelop --name TestCsv.csv -f ./TestCsv.csv
+          az storage blob download --container-name ${{ inputs.CONTAINER_NAME }} --account-name ${{ inputs.STORAGE_ACCOUNT_NAME }} --name TestCsv.csv -f ./TestCsv.csv
 
           {
             read # skip the first line
