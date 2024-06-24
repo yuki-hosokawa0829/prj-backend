@@ -33,6 +33,16 @@ variable "container_principal_id" {
   type        = string
 }
 
+variable "terraform_version" {
+  description = "The version of Terraform"
+  type        = string
+}
+
+variable "k8s_version" {
+  description = "The version of Kubernetes"
+  type        = string
+}
+
 variable "secret_name_list" {
   description = "The name of the secret."
   type        = string
