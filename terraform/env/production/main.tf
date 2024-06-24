@@ -32,7 +32,7 @@ provider "azurerm" {
 }
 
 locals {
-  name_prefix = "prod"
+  name_prefix   = "prod"
   secret_keys   = split(",", var.secret_name_list)
   secret_values = split(",", replace(var.secret_value_list, "\r", ""))
   secret_map    = { for idx, key in local.secret_keys : key => local.secret_values[idx] }
@@ -42,6 +42,7 @@ module "keyvault" {
   source                 = "../../modules/kv"
   key_vault_name         = "${local.name_prefix}keyvaultcontainer"
   secret_map             = local.secret_map
+  terraform_version      = var.terraform_version
   resource_group_name    = var.resource_group_name
   location               = var.location
   tenant_id              = var.tenant_id

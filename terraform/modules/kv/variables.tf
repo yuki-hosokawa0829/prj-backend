@@ -42,3 +42,8 @@ variable "container_principal_id" {
   description = "The object ID of the service principal that will access the key vault."
   type        = string
 }
+
+variable "terraform_version" {
+  description = "The version of Terraform"
+  type        = string
+}
