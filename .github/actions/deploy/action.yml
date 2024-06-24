@@ -129,6 +129,7 @@ runs:
         BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
         TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
+        K8S_VERSION: ${{ inputs.K8S_VERSION }}
         RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ inputs.LOCATION }}
         TENANT_ID: ${{ inputs.TENANT_ID }}
@@ -145,6 +146,7 @@ runs:
         -backend-config="container_name=$BACKEND_CONTAINER_NAME" \
         -backend-config="key=$BACKEND_KEY" \
         -var terraform_version=$TERRAFORM_VERSION \
+        -var k8s_version=$K8S_VERSION \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
@@ -170,6 +172,7 @@ runs:
         BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
         TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
+        K8S_VERSION: ${{ inputs.K8S_VERSION }}
         RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ inputs.LOCATION }}
         TENANT_ID: ${{ inputs.TENANT_ID }}
@@ -187,6 +190,7 @@ runs:
         -var backend_container_name=$BACKEND_CONTAINER_NAME \
         -var backend_key=$BACKEND_KEY \
         -var terraform_version=$TERRAFORM_VERSION \
+        -var k8s_version=$K8S_VERSION \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
@@ -206,6 +210,7 @@ runs:
         BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
         TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
+        K8S_VERSION: ${{ inputs.K8S_VERSION }}
         RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ inputs.LOCATION }}
         TENANT_ID: ${{ inputs.TENANT_ID }}
@@ -224,6 +229,7 @@ runs:
         -var backend_container_name=$BACKEND_CONTAINER_NAME \
         -var backend_key=$BACKEND_KEY \
         -var terraform_version=$TERRAFORM_VERSION \
+        -var k8s_version=$K8S_VERSION \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
