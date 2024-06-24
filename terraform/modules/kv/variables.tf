@@ -13,14 +13,9 @@ variable "key_vault_name" {
   type        = string
 }
 
-variable "secret_name_list" {
-  description = "The name of the secret."
-  type        = string
-}
-
-variable "secret_value_list" {
-  description = "The value of the secret."
-  type        = string
+variable "secret_map" {
+  description = "A map of secrets to store in the key vault."
+  type        = map(string)
 }
 
 variable "resource_group_name" {
