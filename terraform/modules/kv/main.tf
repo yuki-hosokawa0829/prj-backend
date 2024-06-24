@@ -47,7 +47,7 @@ resource "azurerm_role_assignment" "backend_app_secret_officer" {
 
 resource "azurerm_role_assignment" "backend_app_cert_officer" {
   scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Certificate User"
+  role_definition_name = "Key Vault Certificates Officer"
   principal_id         = var.backend_principal_id
 }
 
