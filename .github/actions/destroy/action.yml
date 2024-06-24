@@ -10,6 +10,10 @@ inputs:
     description: 'The version of Terraform to use'
     required: true
 
+  K8S_VERSION:
+    description: 'The version of Kubernetes to use'
+    required: false
+
   CLIENT_ID:
     description: 'The client ID of the service principal used to access the backend storage account'
     required: true
@@ -60,6 +64,14 @@ inputs:
 
   CONTAINER_PRINCIPAL_ID:
     description: 'The principal ID of the service principal used to access the container resource group'
+    required: true
+
+  STORAGE_ACCOUNT_NAME:
+    description: 'The name of the storage account to store CSV file'
+    required: true
+
+  CONTAINER_NAME:
+    description: 'The name of the container to store CSV file'
     required: true
 
 runs:
@@ -116,6 +128,8 @@ runs:
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ inputs.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
+        TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
+        K8S_VERSION: ${{ inputs.K8S_VERSION }}
         RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ inputs.LOCATION }}
         TENANT_ID: ${{ inputs.TENANT_ID }}
@@ -126,12 +140,13 @@ runs:
         SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
         SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
       run: |
-        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
-        init \
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
         -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
         -backend-config="container_name=$BACKEND_CONTAINER_NAME" \
         -backend-config="key=$BACKEND_KEY" \
+        -var terraform_version=$TERRAFORM_VERSION \
+        -var k8s_version=$K8S_VERSION \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
@@ -150,6 +165,8 @@ runs:
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ inputs.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
+        TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
+        K8S_VERSION: ${{ inputs.K8S_VERSION }}
         RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ inputs.LOCATION }}
         TENANT_ID: ${{ inputs.TENANT_ID }}
@@ -160,14 +177,15 @@ runs:
         SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
         SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
       run: |
-        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
-        plan \
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} plan \
         -no-color \
         -destroy \
         -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
         -var backend_container_name=$BACKEND_CONTAINER_NAME \
         -var backend_key=$BACKEND_KEY \
+        -var terraform_version=$TERRAFORM_VERSION \
+        -var k8s_version=$K8S_VERSION \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
@@ -196,14 +214,15 @@ runs:
         SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
         SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
       run: |
-        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} \
-        destroy \
+        terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} destroy \
         -no-color \
         -auto-approve \
         -var backend_resource_group_name=$BACKEND_RESOURCE_GROUP_NAME \
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
         -var backend_container_name=$BACKEND_CONTAINER_NAME \
         -var backend_key=$BACKEND_KEY \
+        -var terraform_version=$TERRAFORM_VERSION \
+        -var k8s_version=$K8S_VERSION \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \

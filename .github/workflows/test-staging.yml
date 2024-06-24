@@ -32,8 +32,9 @@ jobs:
     - name: Test
       uses: ./.github/actions/test
       with:
-        environment: staging
+        ENVIRONMENT: staging
         TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
+        K8S_VERSION: ${{ vars.K8S_VERSION }}
         CLIENT_ID: ${{ secrets.CLIENT_ID_STAGING }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
@@ -42,7 +43,10 @@ jobs:
         RESOURCE_GROUP_NAME: ${{ vars.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ vars.LOCATION }}
         TENANT_ID: ${{ secrets.TENANT_ID }}
+        SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
         BACKEND_PRINCIPAL_ID: ${{ secrets.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ secrets.BASE_PRINCIPAL_ID }}
         PRODUCT_PRINCIPAL_ID: ${{ secrets.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
+        STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
+        CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
