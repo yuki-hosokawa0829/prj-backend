@@ -165,7 +165,7 @@ runs:
     # Will fail the build if not
     - name: Terraform Validate
       shell: bash
-      run: terraform validate -no-color
+      run: terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} validate -no-color
 
     #Terraform Plan
     - name: Terraform Plan
