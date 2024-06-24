@@ -236,7 +236,7 @@ function AddFederatedCredential {
       $FederatedCredentialName = (Get-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId).Name
 
       if ($FederatedCredentialName -ne "GithubActions") {
-        New-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId -Audience "api://AzureADTokenExchange" -Issuer "https://token.actions.githubusercontent.com/" -Name "GitHubActions" -Subject $Subject
+        New-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId -Audience "api://AzureADTokenExchange" -Issuer "https://token.actions.githubusercontent.com" -Name "GitHubActions" -Subject $Subject
       }
 
     } elseif ($EnterpriseAppName -match "Container") {
@@ -253,7 +253,7 @@ function AddFederatedCredential {
       $FederatedCredentialName = (Get-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId).Name
 
       if ($FederatedCredentialName -ne "GithubActions") {
-        New-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId -Audience "api://AzureADTokenExchange" -Issuer "https://token.actions.githubusercontent.com/" -Name "GitHubActions" -Subject $Subject
+        New-AzADAppFederatedCredential -ApplicationObjectId $ApplicationObjectId -Audience "api://AzureADTokenExchange" -Issuer "https://token.actions.githubusercontent.com" -Name "GitHubActions" -Subject $Subject
       }
     }
   }
