@@ -74,6 +74,10 @@ inputs:
     description: 'The name of the container to store CSV file'
     required: true
 
+  CSV_FILE_NAME:
+    description: 'The name of the CSV file'
+    required: true
+
 runs:
   using: 'composite'
   steps:
@@ -94,7 +98,7 @@ runs:
           secret_value=()
 
           # download csv file from azure storage(BOM is not supported)
-          az storage blob download --container-name ${{ inputs.CONTAINER_NAME }} --account-name ${{ inputs.STORAGE_ACCOUNT_NAME }} --name TestCsv.csv -f ./TestCsv.csv
+          az storage blob download --container-name ${{ inputs.CONTAINER_NAME }} --account-name ${{ inputs.STORAGE_ACCOUNT_NAME }} --name ${{ inputs.CSV_FILE_NAME }} -f ./${{ inputs.CSV_FILE_NAME }}
 
           {
             read # skip the first line
