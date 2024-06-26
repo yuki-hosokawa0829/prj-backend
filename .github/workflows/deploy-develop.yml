@@ -41,8 +41,6 @@ jobs:
       uses: ./.github/actions/deploy
       with:
         ENVIRONMENT: develop
-        TERRAFORM_VERSION: ${{ vars.TERRAFORM_VERSION }}
-        K8S_VERSION: ${{ vars.K8S_VERSION }}
         CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
