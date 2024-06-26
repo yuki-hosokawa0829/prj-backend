@@ -8,6 +8,11 @@ variable "tenant_id" {
   type        = string
 }
 
+variable "environment" {
+  description = "The environment to deploy to."
+  type        = string
+}
+
 variable "resource_group_name" {
   description = "The name of the resource group in which the key vault is located."
   type        = string

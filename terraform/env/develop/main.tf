@@ -31,18 +31,10 @@ provider "azurerm" {
   }
 }
 
-locals {
-  name_prefix   = "dev"
-  secret_keys   = split(",", var.secret_name_list)
-  secret_values = split(",", replace(var.secret_value_list, "\r", ""))
-  secret_map    = { for idx, key in local.secret_keys : key => local.secret_values[idx] }
-}
-
 module "keyvault_base" {
   source                 = "../../modules/kv"
   project_suffix         = "base"
-  key_vault_name         = "${local.name_prefix}kvforiacbase"
-  secret_map             = local.secret_map
+  key_vault_name         = "${var.environment}kvforiacbase"
   resource_group_name    = var.resource_group_name
   location               = var.location
   tenant_id              = var.tenant_id
@@ -55,8 +47,7 @@ module "keyvault_base" {
 module "keyvault_product" {
   source                 = "../../modules/kv"
   project_suffix         = "product"
-  key_vault_name         = "${local.name_prefix}kvforiacproduct"
-  secret_map             = local.secret_map
+  key_vault_name         = "${var.environment}kvforiacproduct"
   resource_group_name    = var.resource_group_name
   location               = var.location
   tenant_id              = var.tenant_id
@@ -69,8 +60,7 @@ module "keyvault_product" {
 module "keyvault_container" {
   source                 = "../../modules/kv"
   project_suffix         = "container"
-  key_vault_name         = "${local.name_prefix}kvforiaccontainer"
-  secret_map             = local.secret_map
+  key_vault_name         = "${var.environment}kvforiaccontainer"
   resource_group_name    = var.resource_group_name
   location               = var.location
   tenant_id              = var.tenant_id

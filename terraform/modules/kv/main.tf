@@ -8,18 +8,6 @@ resource "azurerm_key_vault" "kv" {
   soft_delete_retention_days = 7
 }
 
-resource "azurerm_key_vault_secret" "secret" {
-  for_each     = var.secret_map
-  name         = each.key
-  value        = each.value
-  key_vault_id = azurerm_key_vault.kv.id
-
-  # Set role assignments for the service principal
-  depends_on = [
-    azurerm_role_assignment.backend_app_secret_officer
-  ]
-}
-
 #resource "azurerm_key_vault_certificate" "aks_cert" {
 #  name         = "imported-cert"
 #  key_vault_id = azurerm_key_vault.example.id

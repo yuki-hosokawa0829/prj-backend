@@ -13,11 +13,6 @@ variable "key_vault_name" {
   type        = string
 }
 
-variable "secret_map" {
-  description = "A map of secrets to store in the key vault."
-  type        = map(string)
-}
-
 variable "project_suffix" {
   description = "The suffix of project."
   type        = string
