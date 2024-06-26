@@ -14,6 +14,7 @@ resource "azurerm_key_vault_secret" "secret" {
   value        = each.value
   key_vault_id = azurerm_key_vault.kv.id
 
+  # Set role assignments for the service principal
   depends_on = [
     azurerm_role_assignment.backend_app_secret_officer
   ]
@@ -50,7 +51,7 @@ resource "azurerm_role_assignment" "backend_app_crypto_officer" {
 resource "azurerm_role_assignment" "base_app_cert_user" {
   count                = var.project_suffix == "base" ? 1 : 0
   scope                = azurerm_key_vault.kv.id
-  role_definition_name = "Key Vault Secrets Officer"
+  role_definition_name = "Key Vault Certificate User"
   principal_id         = var.base_principal_id
 }
 
