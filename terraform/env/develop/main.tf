@@ -40,7 +40,36 @@ locals {
 
 module "keyvault" {
   source                 = "../../modules/kv"
-  key_vault_name         = "${local.name_prefix}keyvaultcontainer"
+  project_suffix         = "base"
+  key_vault_name         = "${local.name_prefix}kvforiacbase"
+  secret_map             = local.secret_map
+  resource_group_name    = var.resource_group_name
+  location               = var.location
+  tenant_id              = var.tenant_id
+  backend_principal_id   = var.backend_principal_id
+  base_principal_id      = var.base_principal_id
+  product_principal_id   = var.product_principal_id
+  container_principal_id = var.container_principal_id
+}
+
+module "keyvault" {
+  source                 = "../../modules/kv"
+  project_suffix         = "product"
+  key_vault_name         = "${local.name_prefix}kvforiacproduct"
+  secret_map             = local.secret_map
+  resource_group_name    = var.resource_group_name
+  location               = var.location
+  tenant_id              = var.tenant_id
+  backend_principal_id   = var.backend_principal_id
+  base_principal_id      = var.base_principal_id
+  product_principal_id   = var.product_principal_id
+  container_principal_id = var.container_principal_id
+}
+
+module "keyvault" {
+  source                 = "../../modules/kv"
+  project_suffix         = "container"
+  key_vault_name         = "${local.name_prefix}kvforiaccontainer"
   secret_map             = local.secret_map
   resource_group_name    = var.resource_group_name
   location               = var.location

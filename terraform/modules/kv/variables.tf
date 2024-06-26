@@ -18,6 +18,11 @@ variable "secret_map" {
   type        = map(string)
 }
 
+variable "project_suffix" {
+  description = "The suffix of project."
+  type        = string
+}
+
 variable "resource_group_name" {
   description = "The name of the resource group in which the key vault is located."
   type        = string

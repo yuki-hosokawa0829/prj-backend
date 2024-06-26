@@ -48,30 +48,35 @@ resource "azurerm_role_assignment" "backend_app_crypto_officer" {
 }
 
 resource "azurerm_role_assignment" "base_app_cert_user" {
+  count                = var.project_suffix == "base" ? 1 : 0
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = var.base_principal_id
 }
 
 resource "azurerm_role_assignment" "product_app_secret_officer" {
+  count                = var.project_suffix == "product" ? 1 : 0
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = var.product_principal_id
 }
 
 resource "azurerm_role_assignment" "container_app_secret_user" {
+  count                = var.project_suffix == "container" ? 1 : 0
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = var.container_principal_id
 }
 
 resource "azurerm_role_assignment" "container_app_cert_user" {
+  count                = var.project_suffix == "container" ? 1 : 0
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Certificate User"
   principal_id         = var.container_principal_id
 }
 
 resource "azurerm_role_assignment" "container_app_crypto_user" {
+  count                = var.project_suffix == "container" ? 1 : 0
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Crypto User"
   principal_id         = var.container_principal_id
