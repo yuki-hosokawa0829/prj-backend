@@ -43,12 +43,13 @@ variable "container_principal_id" {
   type        = string
 }
 
-variable "terraform_version" {
-  description = "The version of Terraform"
-  type        = string
-}
+#variable "aks_certificate_path" {
+#  description = "The path to the certificate to import."
+#  type        = string
+#}
 
-variable "k8s_version" {
-  description = "The version of Kubernetes"
-  type        = string
-}
+#variable "aks_certificate_password" {
+#  description = "The password for the certificate."
+#  type        = string
+#  sensitive   = true
+#}

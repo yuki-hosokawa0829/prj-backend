@@ -19,25 +19,15 @@ resource "azurerm_key_vault_secret" "secret" {
   ]
 }
 
-resource "azurerm_key_vault_secret" "terraform_version" {
-  name         = "TerraformVersion"
-  value        = var.terraform_version
-  key_vault_id = azurerm_key_vault.kv.id
+#resource "azurerm_key_vault_certificate" "aks_cert" {
+#  name         = "imported-cert"
+#  key_vault_id = azurerm_key_vault.example.id
 
-  depends_on = [
-    azurerm_role_assignment.backend_app_secret_officer
-  ]
-}
-
-resource "azurerm_key_vault_secret" "k8s_version" {
-  name         = "K8sVersion"
-  value        = var.k8s_version
-  key_vault_id = azurerm_key_vault.kv.id
-
-  depends_on = [
-    azurerm_role_assignment.backend_app_secret_officer
-  ]
-}
+#  certificate {
+#    contents = filebase64(var.aks_certificate_path)
+#    password = var.aks_certificate_password
+#  }
+#}
 
 resource "azurerm_role_assignment" "backend_app_secret_officer" {
   scope                = azurerm_key_vault.kv.id
