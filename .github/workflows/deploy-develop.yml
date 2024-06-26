@@ -40,7 +40,7 @@ jobs:
     - name: Deploy
       uses: ./.github/actions/deploy
       with:
-        ENVIRONMENT: develop
+        ENVIRONMENT: ${{ vars.ENVIROMENT }}
         CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
@@ -56,4 +56,3 @@ jobs:
         CONTAINER_PRINCIPAL_ID: ${{ secrets.CONTAINER_PRINCIPAL_ID }}
         STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
-        CSV_FILE_NAME: 'TestCsv.csv'

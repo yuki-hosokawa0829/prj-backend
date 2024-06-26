@@ -66,10 +66,6 @@ inputs:
     description: 'The name of the container to store CSV file'
     required: true
 
-  CSV_FILE_NAME:
-    description: 'The name of the CSV file'
-    required: true
-
 runs:
   using: 'composite'
   steps:
@@ -137,8 +133,7 @@ runs:
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
         PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
-        #SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
-        #SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
+
       run: |
         terraform -chdir=terraform/env/$ENVIRONMENT init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
@@ -153,8 +148,6 @@ runs:
         -var base_principal_id=$BASE_PRINCIPAL_ID \
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
-        #-var secret_name_list=$SECRET_NAME_LIST \
-        #-var secret_value_list=$SECRET_VALUE_LIST
 
     # Checks that all Terraform configuration files adhere to a canonical format
     # Will fail the build if not
@@ -178,8 +171,6 @@ runs:
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
         PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
-        #SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
-        #SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
       run: |
         terraform -chdir=terraform/env/$ENVIRONMENT plan \
         -no-color \
@@ -195,8 +186,6 @@ runs:
         -var base_principal_id=$BASE_PRINCIPAL_ID \
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
-        #-var secret_name_list=$SECRET_NAME_LIST \
-        #-var secret_value_list=$SECRET_VALUE_LIST
 
     # Terraform Apply
     - name: Terraform Apply
@@ -214,8 +203,6 @@ runs:
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
         PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
-        #SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
-        #SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
       run: |
         terraform -chdir=terraform/env/$ENVIRONMENT apply \
         -no-color \
@@ -232,5 +219,3 @@ runs:
         -var base_principal_id=$BASE_PRINCIPAL_ID \
         -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
-        #-var secret_name_list=$SECRET_NAME_LIST \
-        #-var secret_value_list=$SECRET_VALUE_LIST
