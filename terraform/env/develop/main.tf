@@ -38,7 +38,7 @@ locals {
   secret_map    = { for idx, key in local.secret_keys : key => local.secret_values[idx] }
 }
 
-module "keyvault" {
+module "keyvault_base" {
   source                 = "../../modules/kv"
   project_suffix         = "base"
   key_vault_name         = "${local.name_prefix}kvforiacbase"
@@ -52,7 +52,7 @@ module "keyvault" {
   container_principal_id = var.container_principal_id
 }
 
-module "keyvault" {
+module "keyvault_product" {
   source                 = "../../modules/kv"
   project_suffix         = "product"
   key_vault_name         = "${local.name_prefix}kvforiacproduct"
@@ -66,7 +66,7 @@ module "keyvault" {
   container_principal_id = var.container_principal_id
 }
 
-module "keyvault" {
+module "keyvault_container" {
   source                 = "../../modules/kv"
   project_suffix         = "container"
   key_vault_name         = "${local.name_prefix}kvforiaccontainer"
