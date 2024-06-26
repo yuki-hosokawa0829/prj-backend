@@ -40,7 +40,7 @@ jobs:
     - name: Deploy
       uses: ./.github/actions/deploy
       with:
-        ENVIRONMENT: ${{ vars.ENVIROMENT }}
+        ENVIRONMENT: ${{ vars.ENVIRONMENT }}
         CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
