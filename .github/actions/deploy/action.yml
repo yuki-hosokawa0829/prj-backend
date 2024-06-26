@@ -103,7 +103,7 @@ runs:
           for i in "${!secret_name[@]}"; do
             echo "secret_name: ${secret_name[$i]}, secret_value: ${secret_value[$i]}"
             if ${secret_name[$i]}=='TERRAFORM_VERSION'; then
-              TERRAFORM_VERSION=${secret_value[$i]}
+              terraform_version=${secret_value[$i]}
             fi
           done
 
@@ -112,7 +112,7 @@ runs:
 
           echo "SECRET_NAME_LIST=$secret_name_list" >> "$GITHUB_OUTPUT"
           echo "SECRET_VALUE_LIST=$secret_value_list" >> "$GITHUB_OUTPUT"
-          echo "TERRAFORM_VERSION=$TERRAFORM_VERSION" >> "$GITHUB_OUTPUT"
+          echo "TERRAFORM_VERSION=$terraform_version" >> "$GITHUB_OUTPUT"
 
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
