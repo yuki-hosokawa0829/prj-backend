@@ -131,7 +131,6 @@ runs:
         TENANT_ID: ${{ inputs.TENANT_ID }}
         BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
-        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
 
       run: |
@@ -146,7 +145,6 @@ runs:
         -var tenant_id=$TENANT_ID \
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
-        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
 
     # Checks that all Terraform configuration files adhere to a canonical format
@@ -169,7 +167,6 @@ runs:
         TENANT_ID: ${{ inputs.TENANT_ID }}
         BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
-        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} plan \
@@ -184,7 +181,6 @@ runs:
         -var tenant_id=$TENANT_ID \
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
-        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
 
     # Terraform Apply
@@ -201,7 +197,6 @@ runs:
         TENANT_ID: ${{ inputs.TENANT_ID }}
         BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
-        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} apply \
@@ -217,5 +212,4 @@ runs:
         -var tenant_id=$TENANT_ID \
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
-        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \

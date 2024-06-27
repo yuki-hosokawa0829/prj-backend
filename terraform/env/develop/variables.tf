@@ -28,11 +28,6 @@ variable "base_principal_id" {
   type        = string
 }
 
-variable "product_principal_id" {
-  description = "The object ID of the service principal that will access the key vault."
-  type        = string
-}
-
 variable "container_principal_id" {
   description = "The object ID of the service principal that will access the key vault."
   type        = string

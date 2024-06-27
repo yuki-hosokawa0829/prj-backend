@@ -43,11 +43,11 @@ resource "azurerm_role_assignment" "base_app_cert_user" {
   principal_id         = var.base_principal_id
 }
 
-resource "azurerm_role_assignment" "product_app_secret_officer" {
-  count                = var.project_suffix == "product" ? 1 : 0
+resource "azurerm_role_assignment" "base_app_secret_officer" {
+  count                = var.project_suffix == "base" ? 1 : 0
   scope                = azurerm_key_vault.kv.id
   role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = var.product_principal_id
+  principal_id         = var.base_principal_id
 }
 
 resource "azurerm_role_assignment" "container_app_secret_user" {
