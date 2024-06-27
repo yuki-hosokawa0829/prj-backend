@@ -50,10 +50,6 @@ inputs:
     description: 'The principal ID of the service principal used to access the base resource group'
     required: true
 
-  PRODUCT_PRINCIPAL_ID:
-    description: 'The principal ID of the service principal used to access the product resource group'
-    required: true
-
   CONTAINER_PRINCIPAL_ID:
     description: 'The principal ID of the service principal used to access the container resource group'
     required: true

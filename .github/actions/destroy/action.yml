@@ -6,14 +6,6 @@ inputs:
     description: 'The environment to deploy to'
     required: true
 
-  TERRAFORM_VERSION:
-    description: 'The version of Terraform to use'
-    required: true
-
-  K8S_VERSION:
-    description: 'The version of Kubernetes to use'
-    required: false
-
   CLIENT_ID:
     description: 'The client ID of the service principal used to access the backend storage account'
     required: true
@@ -58,24 +50,8 @@ inputs:
     description: 'The principal ID of the service principal used to access the base resource group'
     required: true
 
-  PRODUCT_PRINCIPAL_ID:
-    description: 'The principal ID of the service principal used to access the product resource group'
-    required: true
-
   CONTAINER_PRINCIPAL_ID:
     description: 'The principal ID of the service principal used to access the container resource group'
-    required: true
-
-  STORAGE_ACCOUNT_NAME:
-    description: 'The name of the storage account to store CSV file'
-    required: true
-
-  CONTAINER_NAME:
-    description: 'The name of the container to store CSV file'
-    required: true
-
-  CSV_FILE_NAME:
-    description: 'The name of the CSV file'
     required: true
 
 runs:
@@ -132,34 +108,26 @@ runs:
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ inputs.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
-        TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
-        K8S_VERSION: ${{ inputs.K8S_VERSION }}
+        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
         RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ inputs.LOCATION }}
         TENANT_ID: ${{ inputs.TENANT_ID }}
         BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
-        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
-        SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
-        SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
         -backend-config="storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME" \
         -backend-config="container_name=$BACKEND_CONTAINER_NAME" \
         -backend-config="key=$BACKEND_KEY" \
-        -var terraform_version=$TERRAFORM_VERSION \
-        -var k8s_version=$K8S_VERSION \
+        -var environment=$ENVIRONMENT \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
-        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
-        -var secret_name_list=$SECRET_NAME_LIST \
-        -var secret_value_list=$SECRET_VALUE_LIST
 
     #Terraform Plan
     - name: Terraform Plan
@@ -169,17 +137,13 @@ runs:
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ inputs.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
-        TERRAFORM_VERSION: ${{ inputs.TERRAFORM_VERSION }}
-        K8S_VERSION: ${{ inputs.K8S_VERSION }}
+        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
         RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ inputs.LOCATION }}
         TENANT_ID: ${{ inputs.TENANT_ID }}
         BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
-        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
-        SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
-        SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} plan \
         -no-color \
@@ -188,17 +152,13 @@ runs:
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
         -var backend_container_name=$BACKEND_CONTAINER_NAME \
         -var backend_key=$BACKEND_KEY \
-        -var terraform_version=$TERRAFORM_VERSION \
-        -var k8s_version=$K8S_VERSION \
+        -var environment=${{ inputs.ENVIRONMENT }} \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
-        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
-        -var secret_name_list=$SECRET_NAME_LIST \
-        -var secret_value_list=$SECRET_VALUE_LIST
 
     #Terraform Plan
     - name: Terraform Destroy
@@ -208,15 +168,14 @@ runs:
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ inputs.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ inputs.BACKEND_CONTAINER_NAME }}
         BACKEND_KEY: ${{ inputs.BACKEND_KEY }}
+        ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
         RESOURCE_GROUP_NAME: ${{ inputs.RESOURCE_GROUP_NAME }}
         LOCATION: ${{ inputs.LOCATION }}
         TENANT_ID: ${{ inputs.TENANT_ID }}
         BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
-        PRODUCT_PRINCIPAL_ID: ${{ inputs.PRODUCT_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
-        SECRET_NAME_LIST: ${{ steps.list-secret.outputs.SECRET_NAME_LIST }}
-        SECRET_VALUE_LIST: ${{ steps.list-secret.outputs.SECRET_VALUE_LIST }}
+
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} destroy \
         -no-color \
@@ -225,14 +184,10 @@ runs:
         -var backend_storage_account_name=$BACKEND_STORAGE_ACCOUNT_NAME \
         -var backend_container_name=$BACKEND_CONTAINER_NAME \
         -var backend_key=$BACKEND_KEY \
-        -var terraform_version=$TERRAFORM_VERSION \
-        -var k8s_version=$K8S_VERSION \
+        -var environment=${{ inputs.ENVIRONMENT }} \
         -var resource_group_name=$RESOURCE_GROUP_NAME \
         -var location=$LOCATION \
         -var tenant_id=$TENANT_ID \
         -var backend_principal_id=$BACKEND_PRINCIPAL_ID \
         -var base_principal_id=$BASE_PRINCIPAL_ID \
-        -var product_principal_id=$PRODUCT_PRINCIPAL_ID \
         -var container_principal_id=$CONTAINER_PRINCIPAL_ID \
-        -var secret_name_list=$SECRET_NAME_LIST \
-        -var secret_value_list=$SECRET_VALUE_LIST
