@@ -88,7 +88,7 @@ function AssignRoleOverResourceGroup {
 
   for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
 
-    if ($i -lt 3) {
+    if ($i -lt $EnterpriseAppNameList.Length - 1) {
       $Scope = "/subscriptions/$SubscriptionId/resourceGroups/" + $ResourceGroupNameList[$i]
       $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
       $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
@@ -164,19 +164,11 @@ function AssignRoleOverStorageContainer {
     [String[]] $StorageContainerNameList
   )
 
-  for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
-
-    if ($i -lt 3) {
-      $Scope = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/$StorageAccountName/blobServices/default/containers/" + $StorageContainerNameList[$i]
-      $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
-      $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
-      $RoleAssginment =  Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor"
-    } else {
-      $Scope = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/$StorageAccountName/blobServices/default/containers/" + $StorageContainerNameList[$i - 1]
-      $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
-      $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
-      $RoleAssginment =  Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor"
-    }
+  for ($i = 0; $i -lt $StorageContainerNameList.Length; $i++) {
+    $Scope = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/$StorageAccountName/blobServices/default/containers/" + $StorageContainerNameList[$i]
+    $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
+    $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
+    $RoleAssginment =  Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor"
 
     if ($null -eq $RoleAssginment) {
       New-AzRoleAssignment -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor" -Scope $Scope

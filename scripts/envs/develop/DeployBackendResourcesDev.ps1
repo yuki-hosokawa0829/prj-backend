@@ -88,7 +88,7 @@ function AssignRoleOverResourceGroup {
 
   for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
 
-    if ($i -lt 3) {
+    if ($i -lt $EnterpriseAppNameList.Length - 1) {
       $Scope = "/subscriptions/$SubscriptionId/resourceGroups/" + $ResourceGroupNameList[$i]
       $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
       $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
@@ -166,7 +166,7 @@ function AssignRoleOverStorageContainer {
 
   for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
 
-    if ($i -lt 3) {
+    if ($i -lt $EnterpriseAppNameList.Length - 1) {
       $Scope = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/$StorageAccountName/blobServices/default/containers/" + $StorageContainerNameList[$i]
       $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
       $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId

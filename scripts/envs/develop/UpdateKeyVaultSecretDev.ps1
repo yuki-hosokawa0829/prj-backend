@@ -24,7 +24,7 @@ function UpdateKeyVaultSecret {
       } elseif ($null -eq $UploadedSecretValue){
         Write-Output "The secret $SecretName does not exist."
       } else {
-        $Reply = Read-Host "Do you want to update $SecretName? (y/n)"
+        $Reply = Read-Host "Do you want to update $SecretName ? (y/n)"
         if ($Reply -eq "y") {
           $SecuredNewSecretValue = ConvertTo-SecureString -String $NewSecretValue -AsPlainText -Force
           Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecuredNewSecretValue
