@@ -17,10 +17,7 @@ function SetKeyVaultSecret {
       $SecretName = $Secret.SecretName
       $SecretValue = (ConvertTo-SecureString -String $Secret.SecretValue -AsPlainText -Force)
       $KeyVaultName = $Secret.KeyVaultName
-
-      if (($KeyVaultName -match "Base" -and $CsvFileName -match "Base") -or ($KeyVaultName -match "Container" -and $CsvFileName -match "Container")) {
-        Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecretValue
-      }
+      Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecretValue
     }
   }
 }
