@@ -1,5 +1,5 @@
 ### Import Variables
-Invoke-Expression (Get-Content ".\VariablesKvDev.ps1" -Raw)
+Invoke-Expression (Get-Content ".\VariablesDev.ps1" -Raw)
 
 ### Functions
 # Set Key Vault Secrets
