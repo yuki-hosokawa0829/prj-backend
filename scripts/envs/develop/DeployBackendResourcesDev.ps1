@@ -166,20 +166,15 @@ function AssignRoleOverStorageContainer {
 
   for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
 
-    if ($i -lt $EnterpriseAppNameList.Length - 1) {
+    for ($i = 0; $i -lt $StorageContainerNameList.Length; $i++) {
       $Scope = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/$StorageAccountName/blobServices/default/containers/" + $StorageContainerNameList[$i]
       $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
       $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
       $RoleAssginment =  Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor"
-    } else {
-      $Scope = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/$StorageAccountName/blobServices/default/containers/" + $StorageContainerNameList[$i - 1]
-      $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
-      $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
-      $RoleAssginment =  Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor"
-    }
 
-    if ($null -eq $RoleAssginment) {
-      New-AzRoleAssignment -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor" -Scope $Scope
+      if ($null -eq $RoleAssginment) {
+        New-AzRoleAssignment -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor" -Scope $Scope
+      }
     }
   }
 }
