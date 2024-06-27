@@ -65,47 +65,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Azure Login
-      uses: azure/login@v2
-      with:
-        client-id: ${{ inputs.CLIENT_ID }}
-        tenant-id: ${{ inputs.TENANT_ID }}
-        subscription-id: ${{ inputs.SUBSCRIPTION_ID }}
-
-    #- name: List Secret
-    #  id: list-secret
-    #  uses: azure/cli@v2
-    #  with:
-    #    azcliversion: latest
-    #    inlineScript: |
-    #      secret_name=()
-    #      secret_value=()
-
-          # download csv file from azure storage(BOM is not supported)
-    #      az storage blob download --container-name ${{ inputs.CONTAINER_NAME }} --account-name ${{ inputs.STORAGE_ACCOUNT_NAME }} --name ${{ inputs.CSV_FILE_NAME }} -f ./${{ inputs.CSV_FILE_NAME }}
-
-    #      {
-    #        read # skip the first line
-    #        while IFS=, read -r col1 col2; do
-    #          secret_name+=("$col1")
-    #          secret_value+=("$col2")
-    #        done
-    #      } < TestCsv.csv
-
-    #      for i in "${!secret_name[@]}"; do
-    #        echo "secret_name: ${secret_name[$i]}, secret_value: ${secret_value[$i]}"
-    #        if [ ${secret_name[$i]} = "TerraformVersion" ]; then
-    #          terraform_version=${secret_value[$i]}
-    #        fi
-    #      done
-
-    #      secret_name_list=$(IFS=,; echo "${secret_name[*]}")
-    #      secret_value_list=$(IFS=,; echo "${secret_value[*]}")
-
-    #      echo "SECRET_NAME_LIST=$secret_name_list" >> "$GITHUB_OUTPUT"
-    #      echo "SECRET_VALUE_LIST=$secret_value_list" >> "$GITHUB_OUTPUT"
-    #      echo "TERRAFORM_VERSION=$terraform_version" >> "$GITHUB_OUTPUT"
-
     # Install the latest version of Terraform CLI and configure the Terraform CLI configuration file with a Terraform Cloud user API token
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
