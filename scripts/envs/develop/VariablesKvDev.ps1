@@ -9,11 +9,11 @@ $global:FilePath = "C:\Users\river\workdir"
 
 # Csv File Name
 $global:CsvFileNameList = @(
-  $Environment + "ProductTestCsv.csv"
+  $Environment + "BaseTestCsv.csv"
   $Environment + "ContainerTestCsv.csv"
 )
 
 $global:CsvFileNameWithExpDateList = @(
-  $Environment + "ProductTestCsvWithExpDate.csv"
+  $Environment + "BaseTestCsvWithExpDate.csv"
   $Environment + "ContainerTestCsvWithExpDate.csv"
 )

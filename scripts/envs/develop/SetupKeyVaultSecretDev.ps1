@@ -18,7 +18,7 @@ function SetKeyVaultSecret {
       $SecretValue = (ConvertTo-SecureString -String $Secret.SecretValue -AsPlainText -Force)
       $KeyVaultName = $Secret.KeyVaultName
 
-      if (($KeyVaultName -match "Product" -and $CsvFileName -match "Product") -or ($KeyVaultName -match "Container" -and $CsvFileName -match "Container")) {
+      if (($KeyVaultName -match "Base" -and $CsvFileName -match "Base") -or ($KeyVaultName -match "Container" -and $CsvFileName -match "Container")) {
         Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecretValue
       }
     }
@@ -42,7 +42,7 @@ function SetKeyVaultSecretWithExpDate {
       $KeyVaultName = $Secret.KeyVaultName
       $ExpDate = $Secret.ExpirationDate
 
-      if (($KeyVaultName -match "Product" -and $CsvFileNameWithExpDate -match "Product") -or ($KeyVaultName -match "Container" -and $CsvFileNameWithExpDate -match "Container")) {
+      if (($KeyVaultName -match "Base" -and $CsvFileNameWithExpDate -match "Base") -or ($KeyVaultName -match "Container" -and $CsvFileNameWithExpDate -match "Container")) {
         Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecretValue -Expires $ExpDate
       }
     }
