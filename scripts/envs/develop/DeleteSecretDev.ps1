@@ -34,4 +34,9 @@ Connect-AzAccount -Subscription $SubscriptionId -Tenant $TenantId
 
 # Delete Secrets
 RemoveKeyVaultSecret -FilePath $FilePath -CsvFileNameList $CsvFileNameList
-RemoveKeyVaultSecret -FilePath $FilePath -CsvFileNameList $CsvFileNameWithExpDateList
+$Reply = Read-Host "Do you want to execute this procedure? (y/n)"
+if ($Reply -eq "y") {
+  RemoveKeyVaultSecret -FilePath $FilePath -CsvFileNameList $CsvFileNameWithExpDateList
+} else {
+  Write-Host "The procedure was canceled."
+}
