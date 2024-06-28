@@ -6,12 +6,12 @@ on:
     - main
 
 #These environment variables are used by the terraform azure provider to setup OIDD authenticate.
-env:
-  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
-  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_DEVELOP }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
-  ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
-  ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
+#env:
+#  ARM_CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
+#  ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_DEVELOP }}
+#  ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+#  ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+#  ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
   #IS_FEATURE_BRANCH: ${{ startsWith(github.ref, 'refs/heads/feature/') }}
   #IS_MAIN_BRANCH: ${{ github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main' }}
 
@@ -31,6 +31,12 @@ jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
     environment: develop
+    env:
+      ARM_CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
+      ARM_CLIENT_SECRET: ${{ secrets.CLIENT_SECRET_DEVELOP }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
+      ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_DEVELOP }}
     if: ${{ startsWith(github.ref, 'refs/heads/feature/') || github.ref == 'refs/heads/main' || github.base_ref == 'refs/heads/main'}}
     steps:
       # Checkout the repository to the GitHub Actions runner
