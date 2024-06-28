@@ -27,7 +27,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     environment: production
-    if: ${{ github.ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) && github.base_ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }}
+    if: ${{ github.ref == format('refs/heads/production/{0}', vars.PLAN_VERSION) || github.base_ref == format('refs/heads/production/{0}', vars.PLAN_VERSION) }}
     steps:
     - name: Unknown Branch
       run: exit 1
