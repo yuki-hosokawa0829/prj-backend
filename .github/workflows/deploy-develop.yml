@@ -20,7 +20,6 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    #if: ${{ !env.IS_FEATURE_BRANCH && !env.IS_MAIN_BRANCH }}
     if: ${{ !startsWith(github.ref, 'refs/heads/feature/') && github.ref != 'refs/heads/main' && github.base_ref != 'refs/heads/main'}}
     steps:
     - name: Unknown Branch
