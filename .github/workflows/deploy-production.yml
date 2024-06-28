@@ -20,9 +20,10 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
+    environment: production
     steps:
     - name: Test
-      run: echo ${{ github.ref }} && echo ${{ github.base_ref }}
+      run: echo ${{ github.ref }} && echo ${{ github.base_ref }} && echo ${{ vars.PLAN_VERSION }}
   check:
     runs-on: ubuntu-latest
     environment: production
