@@ -23,7 +23,7 @@ jobs:
     environment: production
     steps:
     - name: Test
-      run: echo ${{ format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.base_ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }}
+      run: echo ${{ format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.base_ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && ${{ github.ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) && github.base_ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }}
   check:
     runs-on: ubuntu-latest
     environment: production
