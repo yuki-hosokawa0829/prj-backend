@@ -40,8 +40,8 @@ $global:FilePath = "C:\Users\river\workdir"
 
 ### Csv File Name for Key Vault Secrets
 $global:CsvFileNameList = @(
-  $Environment + "BaseTestCsv.csv"
-  $Environment + "ContainerTestCsv.csv"
+  "iac-base.csv"
+  "iac-container.csv"
 )
 
 $global:CsvFileNameWithExpDateList = @(
