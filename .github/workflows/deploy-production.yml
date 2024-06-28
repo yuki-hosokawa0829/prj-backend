@@ -23,7 +23,7 @@ jobs:
     environment: production
     steps:
     - name: Test
-      run: github.ref = ${{ github.ref }} && github.base_ref = ${{ github.base_ref }} && PLAN_VERSION = ${{ vars.PLAN_VERSION }}
+      run: ${{ github.ref }} && ${{ github.base_ref }} && ${{ vars.PLAN_VERSION }}
   check:
     runs-on: ubuntu-latest
     environment: production
