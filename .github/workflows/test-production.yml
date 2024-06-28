@@ -37,7 +37,7 @@ jobs:
       uses: ./.github/actions/test
       with:
         ENVIRONMENT: ${{ vars.ENVIRONMENT }}
-        CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID_PRODUCTION }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
