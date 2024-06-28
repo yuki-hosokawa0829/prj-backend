@@ -23,7 +23,7 @@ jobs:
     environment: production
     steps:
     - name: Test
-      run: echo ${{ format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.base_ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && ${{ github.ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) && github.base_ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }}
+      run: echo ${{ format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.base_ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }} && echo ${{ github.ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) && github.base_ref != format('refs/heads/production/{0}', vars.PLAN_VERSION) }}
   check:
     runs-on: ubuntu-latest
     environment: production
@@ -45,7 +45,7 @@ jobs:
       uses: ./.github/actions/deploy
       with:
         ENVIRONMENT: ${{ vars.ENVIRONMENT }}
-        CLIENT_ID: ${{ secrets.CLIENT_ID_DEVELOP }}
+        CLIENT_ID: ${{ secrets.CLIENT_ID_PRODUCTION }}
         BACKEND_RESOURCE_GROUP_NAME: ${{ vars.BACKEND_RESOURCE_GROUP_NAME }}
         BACKEND_STORAGE_ACCOUNT_NAME: ${{ vars.BACKEND_STORAGE_ACCOUNT_NAME }}
         BACKEND_CONTAINER_NAME: ${{ vars.BACKEND_CONTAINER_NAME }}
