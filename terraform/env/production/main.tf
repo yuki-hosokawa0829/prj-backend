@@ -31,24 +31,26 @@ provider "azurerm" {
   }
 }
 
-locals {
-  name_prefix   = "prod"
-  secret_keys   = split(",", var.secret_name_list)
-  secret_values = split(",", replace(var.secret_value_list, "\r", ""))
-  secret_map    = { for idx, key in local.secret_keys : key => local.secret_values[idx] }
-}
-
-module "keyvault" {
+module "keyvault_base" {
   source                 = "../../modules/kv"
-  key_vault_name         = "${local.name_prefix}keyvaultcontainer"
-  secret_map             = local.secret_map
-  terraform_version      = var.terraform_version
-  k8s_version            = var.k8s_version
+  project_suffix         = "base"
+  key_vault_name         = "${var.environment}kvforbase"
   resource_group_name    = var.resource_group_name
   location               = var.location
   tenant_id              = var.tenant_id
   backend_principal_id   = var.backend_principal_id
   base_principal_id      = var.base_principal_id
-  product_principal_id   = var.product_principal_id
+  container_principal_id = var.container_principal_id
+}
+
+module "keyvault_container" {
+  source                 = "../../modules/kv"
+  project_suffix         = "container"
+  key_vault_name         = "${var.environment}kvforcontainer"
+  resource_group_name    = var.resource_group_name
+  location               = var.location
+  tenant_id              = var.tenant_id
+  backend_principal_id   = var.backend_principal_id
+  base_principal_id      = var.base_principal_id
   container_principal_id = var.container_principal_id
 }

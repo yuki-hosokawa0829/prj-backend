@@ -8,6 +8,11 @@ variable "tenant_id" {
   type        = string
 }
 
+variable "environment" {
+  description = "The environment to deploy to."
+  type        = string
+}
+
 variable "resource_group_name" {
   description = "The name of the resource group in which the key vault is located."
   type        = string
@@ -23,33 +28,8 @@ variable "base_principal_id" {
   type        = string
 }
 
-variable "product_principal_id" {
-  description = "The object ID of the service principal that will access the key vault."
-  type        = string
-}
-
 variable "container_principal_id" {
   description = "The object ID of the service principal that will access the key vault."
-  type        = string
-}
-
-variable "terraform_version" {
-  description = "The version of Terraform"
-  type        = string
-}
-
-variable "k8s_version" {
-  description = "The version of Kubernetes"
-  type        = string
-}
-
-variable "secret_name_list" {
-  description = "The name of the secret."
-  type        = string
-}
-
-variable "secret_value_list" {
-  description = "The value of the secret."
   type        = string
 }
 
