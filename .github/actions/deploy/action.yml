@@ -54,14 +54,6 @@ inputs:
     description: 'The principal ID of the service principal used to access the container resource group'
     required: true
 
-  STORAGE_ACCOUNT_NAME:
-    description: 'The name of the storage account to store CSV file'
-    required: true
-
-  CONTAINER_NAME:
-    description: 'The name of the container to store CSV file'
-    required: true
-
 runs:
   using: 'composite'
   steps:
@@ -69,7 +61,6 @@ runs:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
       with:
-        #terraform_version: ${{ steps.list-secret.outputs.TERRAFORM_VERSION }}
         terraform_version: 1.8.5
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
@@ -87,7 +78,6 @@ runs:
         BACKEND_PRINCIPAL_ID: ${{ inputs.BACKEND_PRINCIPAL_ID }}
         BASE_PRINCIPAL_ID: ${{ inputs.BASE_PRINCIPAL_ID }}
         CONTAINER_PRINCIPAL_ID: ${{ inputs.CONTAINER_PRINCIPAL_ID }}
-
       run: |
         terraform -chdir=terraform/env/${{ inputs.ENVIRONMENT }} init \
         -backend-config="resource_group_name=$BACKEND_RESOURCE_GROUP_NAME" \
