@@ -5,20 +5,23 @@ Invoke-Expression (Get-Content ".\VariablesDev.ps1" -Raw)
 # Set Key Vault Secrets with Exspiration Date
 function SetKeyVaultSecretWithExpDate {
   param (
+    [string]$Environment,
     [string]$FilePath,
     [string[]]$CsvFileNameWithExpDateList
   )
 
-  foreach ($CsvFileNameWithExpDate in $CsvFileNameWithExpDateList) {
-    $PathToCsvFile = $FilePath + "\" + $CsvFileNameWithExpDate
-    $SecretList = Import-Csv -Path $PathToCsvFile -Encoding UTF8
+  foreach ($CsvFileName in $CsvFileNameList) {
+    $PathToCsvFile = Join-Path -Path $FilePath -ChildPath $CsvFileName
+    $CsvFileList = Import-Csv -Path $PathToCsvFile -Encoding UTF8
 
-    foreach ($Secret in $SecretList) {
-      $SecretName = $Secret.SecretName
-      $SecretValue = (ConvertTo-SecureString -String $Secret.SecretValue -AsPlainText -Force)
-      $KeyVaultName = $Secret.KeyVaultName
-      $ExpDate = $Secret.ExpirationDate
-      Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecretValue -Expires $ExpDate
+    foreach ($CsvFile in $CsvFileList) {
+      if ($CsvFile.IAM -match "シークレット") {
+        $SecretName = $CsvFile.ParamName
+        $SecretValue = ConvertTo-SecureString -String $CsvFile.ParamValue -AsPlainText -Force
+        $KeyVaultName = $CsvFile.KeyVaultName.Replace("○○", $Environment.ToLower())
+        $ExpDate = $CsvFile.ExpDate
+        Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecretValue -Expires $ExpDate
+      }
     }
   }
 }
@@ -30,7 +33,7 @@ Connect-AzAccount -Subscription $SubscriptionId -Tenant $TenantId
 # Set Key Vault Secrets with Exspilation Date
 $Reply = Read-Host "Do you want to execute this procedure? (y/n)"
 if ($Reply -eq "y") {
-  SetKeyVaultSecretWithExpDate -FilePath $FilePath -CsvFileNameWithExpDateList $CsvFileNameWithExpDateList
+  SetKeyVaultSecretWithExpDate -Environment $Environment -FilePath $FilePath -CsvFileNameWithExpDateList $CsvFileNameWithExpDateList
 } else {
   Write-Host "The procedure was canceled."
 }

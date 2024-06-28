@@ -12,8 +12,6 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.SUBSCRIPTION_ID }}
   ARM_TENANT_ID: ${{ secrets.TENANT_ID }}
   ARM_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_KEY_STAGING }}
-  #PRE-PRODUCTION_BRANCH: ${{ format('refs/heads/pre-production/{0}', 'hoge') }}
-  #IS_PRE-PRODUCTION_BRANCH: ${{ github.ref == env.PRE-PRODUCTION_BRANCH || github.base_ref == env.PRE-PRODUCTION_BRANCH }}
 
 permissions:
   id-token: write
@@ -22,7 +20,6 @@ permissions:
 jobs:
   check:
     runs-on: ubuntu-latest
-    #if: ${{ !env.IS_PRE-PRODUCTION_BRANCH }}
     if: ${{ github.ref != format('refs/heads/pre-production/{0}', 'hoge') && github.base_ref != format('refs/heads/pre-production/{0}', 'hoge') }}
     steps:
     - name: Unknown Branch

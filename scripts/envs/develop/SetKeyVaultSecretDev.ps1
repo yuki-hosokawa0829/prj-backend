@@ -5,19 +5,22 @@ Invoke-Expression (Get-Content ".\VariablesDev.ps1" -Raw)
 # Set Key Vault Secrets
 function SetKeyVaultSecret {
   param (
+    [string]$Environment,
     [string]$FilePath,
     [string[]]$CsvFileNameList
   )
 
   foreach ($CsvFileName in $CsvFileNameList) {
-    $PathToCsvFile = $FilePath + "\" + $CsvFileName
-    $SecretList = Import-Csv -Path $PathToCsvFile -Encoding UTF8
+    $PathToCsvFile = Join-Path -Path $FilePath -ChildPath $CsvFileName
+    $CsvFileList = Import-Csv -Path $PathToCsvFile -Encoding UTF8
 
-    foreach ($Secret in $SecretList) {
-      $SecretName = $Secret.SecretName
-      $SecretValue = (ConvertTo-SecureString -String $Secret.SecretValue -AsPlainText -Force)
-      $KeyVaultName = $Secret.KeyVaultName
-      Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecretValue
+    foreach ($CsvFile in $CsvFileList) {
+      if ($CsvFile.IAM -match "シークレット") {
+        $SecretName = $CsvFile.ParamName
+        $SecretValue = ConvertTo-SecureString -String $CsvFile.ParamValue -AsPlainText -Force
+        $KeyVaultName = $CsvFile.KeyVaultName.Replace("○○", $Environment.ToLower())
+        Set-AzKeyVaultSecret -VaultName $KeyVaultName -Name $SecretName -SecretValue $SecretValue
+      }
     }
   }
 }
@@ -26,4 +29,4 @@ function SetKeyVaultSecret {
 Connect-AzAccount -Subscription $SubscriptionId -Tenant $TenantId
 
 # Set Key Vault Secrets
-SetKeyVaultSecret -FilePath $FilePath -CsvFileNameList $CsvFileNameList
+SetKeyVaultSecret -Environment $Environment -FilePath $FilePath -CsvFileNameList $CsvFileNameList
