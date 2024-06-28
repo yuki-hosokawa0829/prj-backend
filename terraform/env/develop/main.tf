@@ -34,7 +34,7 @@ provider "azurerm" {
 module "keyvault_base" {
   source                 = "../../modules/kv"
   project_suffix         = "base"
-  key_vault_name         = "${var.environment}kvforiacbase"
+  key_vault_name         = "${var.environment}kvforbase"
   resource_group_name    = var.resource_group_name
   location               = var.location
   tenant_id              = var.tenant_id
@@ -46,7 +46,7 @@ module "keyvault_base" {
 module "keyvault_container" {
   source                 = "../../modules/kv"
   project_suffix         = "container"
-  key_vault_name         = "${var.environment}kvforiaccontainer"
+  key_vault_name         = "${var.environment}kvforcontainer"
   resource_group_name    = var.resource_group_name
   location               = var.location
   tenant_id              = var.tenant_id
