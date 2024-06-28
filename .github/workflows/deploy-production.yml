@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Test
-      run: echo github.ref && echo github.base_ref
+      run: echo ${{ github.ref }} && echo ${{ github.base_ref }}
   check:
     runs-on: ubuntu-latest
     environment: production
