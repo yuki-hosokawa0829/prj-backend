@@ -12,6 +12,7 @@ $global:ResourceGroupNameList = @(
   "IAC-Base" + $Environment + "RG"
 )
 $global:ResourceGroupNameForBackend = $ResourceGroupNameList[0]
+$global:ResourceGroupNameForBase = $ResourceGroupNameList[1]
 
 # Enterprise Application for GitHub Actions
 $global:EnterpriseAppNameList = @(

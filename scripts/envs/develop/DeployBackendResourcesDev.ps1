@@ -206,6 +206,27 @@ function AssignRBACAdministerRoleToServicePrincipal {
   }
 }
 
+function AssignRBACAdministerRoleToServicePrincipalToBaseApp {
+  param (
+    [string] $SubscriptionId,
+    [String] $EnterpriseAppName,
+    [String] $ResourceGroupName
+  )
+
+  # Assign RBAC Administer Role to Service Principal over Resource Group to manage IAM setting of Key Vault
+  $Scope = "/subscriptions/$SubscriptionId/resourceGroups/" + $ResourceGroupName
+  $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppName
+  $ServicePrincipalId = (Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId).Id
+
+  # Create Condition for Role Assignment to manage IAM setting of Key Vault
+  $Condition = "((!(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})) OR (@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {b12aa53e-6015-4669-85d0-8515ebb3ae7f})) AND ((!(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})) OR (@Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {b12aa53e-6015-4669-85d0-8515ebb3ae7f}))"
+  $RoleAssginment = Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipalId -RoleDefinitionName "Role Based Access Control Administrator"
+
+  if ($null -eq $RoleAssginment) {
+    New-AzRoleAssignment -ObjectId $ServicePrincipalId -RoleDefinitionName "Role Based Access Control Administrator" -Scope $Scope -ConditionVersion 2.0 -Condition $Condition
+  }
+}
+
 function AddFederatedCredential {
   param (
     [string] $OrganizationName,
@@ -283,6 +304,9 @@ AssignRoleOverStorageContainer -SubscriptionId $SubscriptionId -Environment $Env
 
 # Assign RBAC Administer Role to Service Principal
 AssignRBACAdministerRoleToServicePrincipal -SubscriptionId $SubscriptionId -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupName $ResourceGroupNameForBackend -RoleDefinitionIds $RoleDefinitionIds
+
+# Assign RBAC Administer Role to Service Principal to manage IAM setting of AKS User Assigned Managed Identity
+AssignRBACAdministerRoleToServicePrincipalToBaseApp -SubscriptionId $SubscriptionId -EnterpriseAppName $EnterpriseAppNameList[1] -ResourceGroupName $ResourceGroupNameForBase
 
 # Add Federated Credential to connect to Azure by Github Actions
 AddFederatedCredential -OrganizationName $OrganizationName -RepositoryNameForBackendProject $RepositoryNameForBackendProject -RepositoryNameForContainerProject $RepositoryNameForContainerProject -EnterpriseAppNameList $EnterpriseAppNameList
