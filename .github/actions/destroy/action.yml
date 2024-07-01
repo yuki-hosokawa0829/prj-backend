@@ -1,5 +1,5 @@
 name: 'Destroy'
-description: 'Destroy Terraform configuration to Azure'
+description: 'Destroy Terraform configuration'
 
 inputs:
   ENVIRONMENT:
