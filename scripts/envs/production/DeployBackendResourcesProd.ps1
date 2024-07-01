@@ -1,5 +1,5 @@
 ### Import Variables
-Invoke-Expression (Get-Content ".\VariablesProd.ps1" -Raw)
+Invoke-Expression (Get-Content ".\VariablesDev.ps1" -Raw)
 
 
 ### Functions
@@ -164,14 +164,17 @@ function AssignRoleOverStorageContainer {
     [String[]] $StorageContainerNameList
   )
 
-  for ($i = 0; $i -lt $StorageContainerNameList.Length; $i++) {
-    $Scope = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/$StorageAccountName/blobServices/default/containers/" + $StorageContainerNameList[$i]
-    $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
-    $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
-    $RoleAssginment =  Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor"
+  for ($i = 0; $i -lt $EnterpriseAppNameList.Length; $i++) {
 
-    if ($null -eq $RoleAssginment) {
-      New-AzRoleAssignment -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor" -Scope $Scope
+    for ($i = 0; $i -lt $StorageContainerNameList.Length; $i++) {
+      $Scope = "/subscriptions/$SubscriptionId/resourceGroups/$ResourceGroupName/providers/Microsoft.Storage/storageAccounts/$StorageAccountName/blobServices/default/containers/" + $StorageContainerNameList[$i]
+      $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppNameList[$i]
+      $ServicePrincipal = Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId
+      $RoleAssginment =  Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor"
+
+      if ($null -eq $RoleAssginment) {
+        New-AzRoleAssignment -ObjectId $ServicePrincipal.Id -RoleDefinitionName "Contributor" -Scope $Scope
+      }
     }
   }
 }
@@ -200,6 +203,27 @@ function AssignRBACAdministerRoleToServicePrincipal {
 
   if ($null -eq $RoleAssginment) {
     New-AzRoleAssignment -ObjectId $ServicePrincipalIdList[0] -RoleDefinitionName "Role Based Access Control Administrator" -Scope $Scope -ConditionVersion 2.0 -Condition $Condition
+  }
+}
+
+function AssignRBACAdministerRoleToServicePrincipalToBaseApp {
+  param (
+    [string] $SubscriptionId,
+    [String] $EnterpriseAppName,
+    [String] $ResourceGroupName
+  )
+
+  # Assign RBAC Administer Role to Service Principal over Resource Group to manage IAM setting of Key Vault
+  $Scope = "/subscriptions/$SubscriptionId/resourceGroups/" + $ResourceGroupName
+  $EnterpriseApplication = Get-AzADApplication -DisplayName $EnterpriseAppName
+  $ServicePrincipalId = (Get-AzADServicePrincipal -ApplicationId $EnterpriseApplication.AppId).Id
+
+  # Create Condition for Role Assignment to manage IAM setting of Key Vault
+  $Condition = "((!(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})) OR (@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {b12aa53e-6015-4669-85d0-8515ebb3ae7f})) AND ((!(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})) OR (@Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {b12aa53e-6015-4669-85d0-8515ebb3ae7f}))"
+  $RoleAssginment = Get-AzRoleAssignment -Scope $Scope -ObjectId $ServicePrincipalId -RoleDefinitionName "Role Based Access Control Administrator"
+
+  if ($null -eq $RoleAssginment) {
+    New-AzRoleAssignment -ObjectId $ServicePrincipalId -RoleDefinitionName "Role Based Access Control Administrator" -Scope $Scope -ConditionVersion 2.0 -Condition $Condition
   }
 }
 
@@ -280,6 +304,9 @@ AssignRoleOverStorageContainer -SubscriptionId $SubscriptionId -Environment $Env
 
 # Assign RBAC Administer Role to Service Principal
 AssignRBACAdministerRoleToServicePrincipal -SubscriptionId $SubscriptionId -EnterpriseAppNameList $EnterpriseAppNameList -ResourceGroupName $ResourceGroupNameForBackend -RoleDefinitionIds $RoleDefinitionIds
+
+# Assign RBAC Administer Role to Service Principal to manage IAM setting of AKS User Assigned Managed Identity
+AssignRBACAdministerRoleToServicePrincipalToBaseApp -SubscriptionId $SubscriptionId -EnterpriseAppName $EnterpriseAppNameList[1] -ResourceGroupName $ResourceGroupNameForBase
 
 # Add Federated Credential to connect to Azure by Github Actions
 AddFederatedCredential -OrganizationName $OrganizationName -RepositoryNameForBackendProject $RepositoryNameForBackendProject -RepositoryNameForContainerProject $RepositoryNameForContainerProject -EnterpriseAppNameList $EnterpriseAppNameList

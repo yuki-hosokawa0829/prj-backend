@@ -12,6 +12,7 @@ $global:ResourceGroupNameList = @(
   "IAC-Base" + $Environment + "RG"
 )
 $global:ResourceGroupNameForBackend = $ResourceGroupNameList[0]
+$global:ResourceGroupNameForBase = $ResourceGroupNameList[1]
 
 # Enterprise Application for GitHub Actions
 $global:EnterpriseAppNameList = @(
@@ -40,11 +41,11 @@ $global:FilePath = "C:\Users\river\workdir"
 
 ### Csv File Name for Key Vault Secrets
 $global:CsvFileNameList = @(
-  $Environment + "BaseTestCsv.csv"
-  $Environment + "ContainerTestCsv.csv"
+  "iac-base.csv"
+  "iac-container.csv"
 )
 
 $global:CsvFileNameWithExpDateList = @(
-  $Environment + "BaseTestCsvWithExpDate.csv"
-  $Environment + "ContainerTestCsvWithExpDate.csv"
+  "iac-base-exp.csv"
+  "iac-container-exp.csv"
 )
