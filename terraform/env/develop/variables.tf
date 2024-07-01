@@ -39,16 +39,16 @@ variable "backend_resource_group_name" {
 }
 
 variable "backend_storage_account_name" {
-  description = "The name of the storage account in which the backend resources are located."
-  type        = string
+  type = string
+  description = "The name of the storage account used for the backend."
 }
 
 variable "backend_container_name" {
-  description = "The name of the container in which the backend resources are located."
-  type        = string
+  type = string
+  description = "The name of the container in the storage account."
 }
 
 variable "backend_key" {
-  description = "The key to access the backend resources."
-  type        = string
+  type = string
+  description = "The key for the backend."
 }

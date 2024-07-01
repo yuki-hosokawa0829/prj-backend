@@ -10,7 +10,7 @@ function SetKeyVaultSecretWithExpDate {
     [string[]]$CsvFileNameWithExpDateList
   )
 
-  foreach ($CsvFileName in $CsvFileNameList) {
+  foreach ($CsvFileName in $CsvFileNameWithExpDateList) {
     $PathToCsvFile = Join-Path -Path $FilePath -ChildPath $CsvFileName
     $CsvFileList = Import-Csv -Path $PathToCsvFile -Encoding UTF8
 

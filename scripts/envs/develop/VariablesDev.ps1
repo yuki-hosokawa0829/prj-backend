@@ -45,6 +45,6 @@ $global:CsvFileNameList = @(
 )
 
 $global:CsvFileNameWithExpDateList = @(
-  $Environment + "BaseTestCsvWithExpDate.csv"
-  $Environment + "ContainerTestCsvWithExpDate.csv"
+  "iac-base-exp.csv"
+  "iac-container-exp.csv"
 )
